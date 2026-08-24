@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BIGBROVN">
+  <rect width="64" height="64" rx="14" fill="#0a0e15"/>
+  <path d="M11 9h42v37l-6 6-6-6-6 6-6-6-6 6-6-6-6 6V9Z" fill="#f2b544"/>
+  <text x="32" y="38" text-anchor="middle" font-family="Arial, sans-serif" font-size="23" font-weight="800" fill="#17150f">BB</text>
+  <path d="M22 44h18m0 0-4-4m4 4-4 4" fill="none" stroke="#075c35" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
