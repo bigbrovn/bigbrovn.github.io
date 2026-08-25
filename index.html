@@ -892,6 +892,56 @@ html[data-theme="light"] .smart-match,html[data-theme="light"] .request-panel{ba
 @media(max-width:620px){.match-form{grid-template-columns:1fr}.match-submit{width:100%}.request-search{grid-template-columns:1fr}.request-search .btn{width:100%}.request-meta{grid-template-columns:1fr}.request-timeline{grid-template-columns:1fr}.timeline-step::before{display:none}.receipt-actions{flex-direction:column}.receipt-actions .btn{width:100%}}
 @media print{body>*:not(main){display:none!important}.page{display:none!important}.page[data-page="requests"]{display:block!important}.page[data-page="requests"] .page-hero,.page[data-page="requests"] .request-panel:last-child{display:none!important}.page[data-page="requests"] .section{padding:0}.page[data-page="requests"] .request-layout{display:block}.request-panel{border:0;box-shadow:none}.request-receipt{color:#111;background:#fff}.receipt-actions{display:none}.request-meta div{background:#fff}}
 
+
+
+/* =========================================================
+   BIGBROVN MAGIC LAYER — progressive enhancement only.
+   Desktop gets cursor light / soft 3D / reveal / energy tap.
+   Coarse pointers, small screens and reduced-motion users get
+   a deliberately lighter version automatically.
+   ========================================================= */
+:root{--magic-x:50vw;--magic-y:35vh;--magic-strength:1}
+.magic-ambient{position:fixed;inset:-18vh -16vw;z-index:0;pointer-events:none;overflow:hidden;opacity:.88;contain:strict}
+.magic-ambient::before,.magic-ambient::after{content:"";position:absolute;border-radius:50%;filter:blur(86px);will-change:transform,opacity}
+.magic-ambient::before{width:52vw;height:52vw;min-width:520px;min-height:520px;left:-7vw;top:-15vh;background:radial-gradient(circle,rgba(var(--cash-rgb),.19) 0,rgba(var(--signal-rgb),.09) 38%,transparent 70%);animation:magicFloatA 16s ease-in-out infinite alternate}
+.magic-ambient::after{width:48vw;height:48vw;min-width:480px;min-height:480px;right:-5vw;bottom:-22vh;background:radial-gradient(circle,rgba(var(--volt-rgb),.17) 0,rgba(var(--gold-rgb),.08) 42%,transparent 72%);animation:magicFloatB 20s ease-in-out infinite alternate}
+.magic-ambient span{position:absolute;inset:0;background:radial-gradient(420px circle at var(--magic-x) var(--magic-y),rgba(255,255,255,.055),rgba(var(--cash-rgb),.045) 28%,transparent 68%);opacity:var(--magic-strength);transition:opacity .28s ease}
+main,footer{position:relative;z-index:1}
+@keyframes magicFloatA{0%{transform:translate3d(-2%,0,0) scale(.96)}50%{transform:translate3d(12%,11%,0) scale(1.08)}100%{transform:translate3d(24%,3%,0) scale(1)}}
+@keyframes magicFloatB{0%{transform:translate3d(0,0,0) scale(1)}52%{transform:translate3d(-15%,-9%,0) scale(1.1)}100%{transform:translate3d(-5%,-18%,0) scale(.98)}}
+
+
+.magic-tilt{--mx:50%;--my:50%;--rx:0deg;--ry:0deg;transform-style:preserve-3d;will-change:transform;transition:transform .26s var(--ease),border-color .2s,box-shadow .25s;transform:perspective(900px) rotateX(var(--rx)) rotateY(var(--ry)) translateZ(0)}
+.magic-tilt::before{content:"";position:absolute;inset:0;z-index:4;pointer-events:none;border-radius:inherit;background:radial-gradient(360px circle at var(--mx) var(--my),rgba(255,255,255,.10),rgba(var(--cash-rgb),.035) 30%,transparent 70%);opacity:0;transition:opacity .22s ease}
+.magic-tilt:hover::before{opacity:.9}.magic-tilt:hover{box-shadow:0 24px 64px rgba(0,0,0,.30),0 0 0 1px rgba(255,255,255,.045)}
+
+.magic-sheen{position:relative;overflow:hidden}
+.magic-sheen-layer{position:absolute!important;z-index:5!important;pointer-events:none;top:-50%;left:-35%;width:26%;height:200%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.11),transparent);transform:rotate(18deg) translateX(-420%);opacity:0}
+.magic-sheen:hover>.magic-sheen-layer{opacity:1;animation:magicSheen .92s var(--ease)}
+@keyframes magicSheen{to{transform:rotate(18deg) translateX(700%)}}
+
+.magic-reveal{opacity:0;transform:translateY(22px) scale(.988);filter:blur(5px);transition:opacity .72s var(--ease),transform .72s var(--ease),filter .72s var(--ease);transition-delay:var(--reveal-delay,0ms)}
+.magic-reveal.magic-in{opacity:1;transform:none;filter:none}
+
+.btn,.top-tab,.guide-mode,.assistant-option,.activity-item,.category-card,.ticket,.top-card,.match-card{isolation:isolate}.magic-burst-host{position:relative!important;overflow:hidden!important}
+.magic-burst{position:absolute!important;left:0;top:0;z-index:9!important;width:12px;height:12px;margin:-6px 0 0 -6px;border-radius:50%;pointer-events:none;background:radial-gradient(circle,rgba(255,255,255,.92) 0,rgba(var(--cash-rgb),.55) 23%,rgba(var(--cash-rgb),.12) 48%,transparent 72%);transform:translate(var(--bx),var(--by)) scale(.1);animation:magicBurst .58s var(--ease) forwards}
+@keyframes magicBurst{70%{opacity:.86}100%{opacity:0;transform:translate(var(--bx),var(--by)) scale(11)}}
+
+/* Request progress is real-state driven: no timed fake completion. */
+.timeline-step.current{color:var(--text)}
+.timeline-step.current::after{border-color:var(--gold);background:var(--ink-2);box-shadow:0 0 0 6px rgba(var(--gold-rgb),.11);animation:magicStatusPulse 1.9s ease-out infinite}
+.timeline-step.current::before{background:linear-gradient(90deg,var(--cash),var(--line))}
+.status-pill[data-status="checking"]{border-color:rgba(var(--gold-rgb),.38);background:rgba(var(--gold-rgb),.08);color:var(--gold)}
+.status-pill[data-status="eligible"],.status-pill[data-status="completed"]{border-color:rgba(var(--cash-rgb),.38);background:rgba(var(--cash-rgb),.09);color:var(--cash)}
+.status-pill[data-status="needs_info"]{border-color:rgba(var(--alert-rgb),.38);background:rgba(var(--alert-rgb),.08);color:var(--alert)}
+@keyframes magicStatusPulse{70%,100%{box-shadow:0 0 0 13px transparent}}
+
+html[data-theme="light"] .magic-ambient{opacity:.52}html[data-theme="light"] .magic-tilt::before{background:radial-gradient(360px circle at var(--mx) var(--my),rgba(255,255,255,.75),rgba(var(--cash-rgb),.05) 34%,transparent 70%)}
+
+@media(max-width:900px),(pointer:coarse){:root{--magic-strength:.58}.magic-ambient{opacity:.64}.magic-ambient::before,.magic-ambient::after{filter:blur(108px);animation-duration:28s}.magic-tilt{transform:none!important}.magic-tilt::before{display:none}.magic-reveal{filter:none;transform:translateY(12px)}}
+@media(max-width:560px){.magic-ambient{inset:-8vh -45vw;opacity:.48}.magic-ambient::before,.magic-ambient::after{min-width:430px;min-height:430px}.magic-sheen-layer{display:none}}
+@media(prefers-reduced-motion:reduce){.magic-ambient::before,.magic-ambient::after,.magic-sheen:hover>.magic-sheen-layer,.magic-burst,.timeline-step.current::after{animation:none!important}.magic-reveal{opacity:1!important;transform:none!important;filter:none!important}.magic-tilt{transform:none!important}}
+
 </style>
 </head>
 <body>
@@ -1138,7 +1188,7 @@ vi:{
   'how.eyebrow':'TRỢ LÝ NHẬN HOÀN PHÍ','how.title':'Hướng dẫn nhận hoàn phí','how.sub':'Chọn nhóm và đối tác để bắt đầu.','how.p1':'Chọn nhóm và đối tác.','how.p2':'Mở đúng liên kết hoặc dùng đúng mã.','how.p3':'Nhận hoàn phí theo chu kỳ của đối tác.',
   'top.eyebrow':'MẠNG LƯỚI BIGBROVN','top.title':'Kênh đối tác','top.sub':'','top.all':'Tất cả','top.leaderEyebrow':'ĐỐI TÁC ƯU TIÊN','top.leaderTitle':'3 đối tác nổi bật','top.remainingEyebrow':'DANH SÁCH ƯU TIÊN','top.compare':'Các đối tác khác','top.note':'Ưu tiên theo độ phổ biến, quy mô và thông tin pháp lý công bố. Mức hoàn phí không quyết định thứ tự.',
   'match.eyebrow':'GỢI Ý THÔNG MINH','match.title':'Tìm kênh phù hợp','match.sub':'Chọn nhu cầu, BIGBROVN sẽ rút gọn danh sách còn ba đối tác phù hợp nhất.','match.group':'Nhóm giao dịch','match.account':'Tình trạng tài khoản','match.priority':'Ưu tiên của bạn','match.trust':'Độ phổ biến','match.rate':'Mức hoàn phí','match.support':'Hỗ trợ nhanh','match.submit':'Tìm đối tác →','match.best':'Phù hợp nhất','match.use':'Chọn đối tác này','match.reasonTrust':'Phổ biến và dễ tiếp cận','match.reasonRate':'Mức hoàn phí nổi bật trong nhóm','match.reasonSupport':'Phù hợp để gửi UID kiểm tra',
-  'requests.eyebrow':'YÊU CẦU CỦA BẠN','requests.title':'Tra cứu hoàn phí','requests.sub':'Nhập mã BB để xem phiếu và trạng thái yêu cầu đã gửi trên thiết bị này.','requests.search':'Tra cứu →','requests.receipt':'Phiếu yêu cầu','requests.device':'Dữ liệu trên thiết bị này','requests.activity':'Hoạt động gần đây','requests.empty':'Chưa có yêu cầu nào trên thiết bị này.','requests.notFound':'Không tìm thấy mã yêu cầu trên thiết bị này.','requests.received':'Đã tiếp nhận','requests.code':'Mã yêu cầu','requests.partner':'Đối tác','requests.uid':'UID','requests.account':'Tài khoản','requests.sent':'Thời gian gửi','requests.t1':'Đã tiếp nhận','requests.t2':'Kiểm tra UID','requests.t3':'Xác nhận điều kiện','requests.t4':'Hoàn tất','requests.print':'In phiếu','requests.new':'Gửi thêm UID','requests.localNote':'Trạng thái chỉ thay đổi khi hệ thống nhận được xác nhận thực tế.','requests.feedReceived':'Yêu cầu đã được chuyển đến BIGBROVN.',
+  'requests.eyebrow':'YÊU CẦU CỦA BẠN','requests.title':'Tra cứu hoàn phí','requests.sub':'Nhập mã BB để xem phiếu và trạng thái yêu cầu đã gửi trên thiết bị này.','requests.search':'Tra cứu →','requests.receipt':'Phiếu yêu cầu','requests.device':'Dữ liệu trên thiết bị này','requests.activity':'Hoạt động gần đây','requests.empty':'Chưa có yêu cầu nào trên thiết bị này.','requests.notFound':'Không tìm thấy mã yêu cầu trên thiết bị này.','requests.received':'Đã tiếp nhận','requests.code':'Mã yêu cầu','requests.partner':'Đối tác','requests.uid':'UID','requests.account':'Tài khoản','requests.sent':'Thời gian gửi','requests.t1':'Đã tiếp nhận','requests.t2':'Kiểm tra UID','requests.t3':'Xác nhận điều kiện','requests.t4':'Hoàn tất','requests.print':'In phiếu','requests.new':'Gửi thêm UID','requests.localNote':'Trạng thái được đồng bộ tự động sau khi BIGBROVN xác nhận trên Telegram.','requests.feedReceived':'Yêu cầu đã được chuyển đến BIGBROVN.',
   'uid.title':'Gửi UID','uid.sub':'','uid.partner':'Đối tác','uid.account':'Tình trạng tài khoản','uid.new':'Tài khoản mới','uid.existing':'Tài khoản đã có','uid.channel':'Kênh liên hệ','uid.contact':'Thông tin liên hệ','uid.note':'Ghi chú','uid.uidPlaceholder':'Nhập UID tài khoản','uid.contactPlaceholder':'@tên_người_dùng hoặc số điện thoại','uid.notePlaceholder':'Ví dụ: đã xác minh tài khoản, đăng ký bằng liên kết BIGBROVN...','uid.privacy':'Không cần tên thật. Không nhập mật khẩu, OTP, cụm từ khôi phục hoặc khóa riêng tư.','uid.submit':'Gửi UID →','uid.sending':'Đang gửi...','uid.success':'Đã gửi UID. BIGBROVN sẽ phản hồi qua kênh liên hệ đã cung cấp.','uid.error':'Chưa gửi được. Vui lòng thử lại hoặc liên hệ Telegram/Zalo.','uid.config':'Chưa thể gửi yêu cầu. Vui lòng dùng Telegram/Zalo.','uid.serverConfig':'Chưa thể gửi yêu cầu. Vui lòng dùng Telegram/Zalo.','uid.origin':'Chưa thể gửi từ địa chỉ này. Vui lòng dùng Telegram/Zalo.','uid.ready':'Sẵn sàng gửi','uid.checking':'Đang kiểm tra','uid.offline':'Chưa kết nối','uid.last':'Yêu cầu gần nhất','uid.open':'Mở biểu mẫu gửi UID','uid.wait':'Vui lòng chờ một chút trước khi gửi yêu cầu tiếp theo.',
   'faq.eyebrow':'GIẢI ĐÁP','faq.title':'Câu hỏi thường gặp','faq.q1':'Tài khoản cũ có nhận hoàn phí được không?','faq.a1':'Tuỳ chính sách từng đối tác. Một số chương trình chỉ áp dụng tài khoản mới; hãy liên hệ để kiểm tra trước khi thực hiện.','faq.q2':'Con số 100% có phải hoàn toàn bộ phí giao dịch?','faq.a2':'Không nên mặc định như vậy. Tỷ lệ có thể là mức chia sẻ theo chương trình hoặc chỉ áp dụng cho sản phẩm cụ thể.','faq.q3':'Công cụ tính có cho kết quả chắc chắn không?','faq.a3':'Không. Đây là ước tính dựa trên khối lượng giao dịch, phí trung bình và mức hoàn phí công bố.','faq.q4':'BIGBROVN có thu phí tham gia không?','faq.a4':'Không thu phí tham gia. BIGBROVN có thể nhận hoa hồng giới thiệu từ đối tác khi bạn sử dụng các liên kết trên trang.','faq.q5':'Tôi có thể tạo và gửi nhiều tài khoản không?','faq.a5':'Bạn có thể gửi nhiều UID để BIGBROVN kiểm tra. Việc tạo nhiều tài khoản còn phụ thuộc chính sách của từng đối tác.',
   'contact.eyebrow':'HỖ TRỢ','contact.title':'Cần hỗ trợ?','contact.sub':'Liên hệ trực tiếp qua Telegram hoặc Zalo.','contact.tg':'Hỏi về đối tác, mã giới thiệu hoặc điều kiện tài khoản.','contact.zalo':'Kênh hỗ trợ thuận tiện cho người dùng tại Việt Nam.','contact.open':'Mở cuộc trò chuyện →',
@@ -1158,7 +1208,7 @@ en:{
   'how.eyebrow':'REBATE ASSISTANT','how.title':'Rebate guide','how.sub':'Choose a group and partner to begin.','how.p1':'Choose a group and partner.','how.p2':'Open the link or use the code.','how.p3':'Receive rebates on the partner cycle.',
   'top.eyebrow':'TOP REBATES','top.title':'Explore standout rebates','top.sub':'','top.all':'All','top.leaderEyebrow':'PRIORITY PARTNERS','top.leaderTitle':'3 standout partners','top.remainingEyebrow':'PRIORITY LIST','top.compare':'Other partners','top.note':'Ordered by market presence, scale and published regulatory information. Rebate rate does not determine placement.',
   'match.eyebrow':'SMART MATCH','match.title':'Find your best channel','match.sub':'Choose your needs and BIGBROVN will narrow the list to three suitable partners.','match.group':'Trading group','match.account':'Account status','match.priority':'Your priority','match.trust':'Popularity','match.rate':'Rebate rate','match.support':'Fast support','match.submit':'Find partners →','match.best':'Best match','match.use':'Choose this partner','match.reasonTrust':'Popular and accessible','match.reasonRate':'A notable rate in this group','match.reasonSupport':'Suitable for UID review',
-  'requests.eyebrow':'YOUR REQUESTS','requests.title':'Track rebate request','requests.sub':'Enter a BB code to view a request saved on this device.','requests.search':'Track →','requests.receipt':'Request receipt','requests.device':'Data on this device','requests.activity':'Recent activity','requests.empty':'No requests on this device yet.','requests.notFound':'This request code was not found on this device.','requests.received':'Received','requests.code':'Request code','requests.partner':'Partner','requests.uid':'UID','requests.account':'Account','requests.sent':'Submitted','requests.t1':'Received','requests.t2':'UID review','requests.t3':'Eligibility check','requests.t4':'Completed','requests.print':'Print receipt','requests.new':'Submit another UID','requests.localNote':'Status changes only after the system receives a confirmed update.','requests.feedReceived':'The request was delivered to BIGBROVN.',
+  'requests.eyebrow':'YOUR REQUESTS','requests.title':'Track rebate request','requests.sub':'Enter a BB code to view a request saved on this device.','requests.search':'Track →','requests.receipt':'Request receipt','requests.device':'Data on this device','requests.activity':'Recent activity','requests.empty':'No requests on this device yet.','requests.notFound':'This request code was not found on this device.','requests.received':'Received','requests.code':'Request code','requests.partner':'Partner','requests.uid':'UID','requests.account':'Account','requests.sent':'Submitted','requests.t1':'Received','requests.t2':'UID review','requests.t3':'Eligibility check','requests.t4':'Completed','requests.print':'Print receipt','requests.new':'Submit another UID','requests.localNote':'Status syncs automatically after BIGBROVN confirms it in Telegram.','requests.feedReceived':'The request was delivered to BIGBROVN.',
   'uid.title':'Submit UID','uid.sub':'','uid.partner':'Partner','uid.account':'Account status','uid.new':'New account','uid.existing':'Existing account','uid.channel':'Contact channel','uid.contact':'Contact details','uid.note':'Note','uid.uidPlaceholder':'Enter the account UID','uid.contactPlaceholder':'@username or phone number','uid.notePlaceholder':'Example: KYC complete, registered through BIGBROVN...','uid.privacy':'No real name is required. Never enter a password, OTP, seed phrase or private key.','uid.submit':'Submit UID →','uid.sending':'Sending...','uid.success':'UID submitted. BIGBROVN will reply through the contact provided.','uid.error':'Could not submit. Try again or contact Telegram/Zalo.','uid.config':'Submission is unavailable. Please use Telegram/Zalo.','uid.serverConfig':'Submission is unavailable. Please use Telegram/Zalo.','uid.origin':'This address is not allowed. Please use Telegram/Zalo.','uid.ready':'Ready to send','uid.checking':'Checking','uid.offline':'Not connected','uid.last':'Latest request','uid.open':'Open UID form','uid.wait':'Please wait before sending another request.',
   'faq.eyebrow':'FAQ','faq.title':'Frequently asked questions','faq.q1':'Can an existing account receive rebates?','faq.a1':'It depends on the partner. Some programs are for new accounts only; contact support before proceeding.','faq.q2':'Does 100% mean every trading fee is refunded?','faq.a2':'Do not assume so. It may be a program sharing rate or apply only to a specific product.','faq.q3':'Is the calculator result guaranteed?','faq.a3':'No. It is an estimate based on volume, average fee and displayed rebate rate.','faq.q4':'Does BIGBROVN charge a participation fee?','faq.a4':'No participation fee is charged. BIGBROVN may receive referral commission when you use links on this site.','faq.q5':'Can I create and submit multiple accounts?','faq.a5':'You can submit multiple UIDs for review. Creating multiple accounts remains subject to each partner’s policy.',
   'contact.eyebrow':'SUPPORT','contact.title':'Need help?','contact.sub':'Contact us through Telegram or Zalo.','contact.tg':'Ask about partners, referral codes or account terms.','contact.zalo':'A convenient support channel for users in Vietnam.','contact.open':'Open chat →',
@@ -1262,14 +1312,42 @@ function renderMatchResults(categoryKey='crypto',account='new',priority='trust')
   root.scrollIntoView({behavior:'smooth',block:'nearest'})
 }
 function requestDate(value){const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat(state.lang==='vi'?'vi-VN':'en-US',{dateStyle:'short',timeStyle:'short'}).format(date)}
-function renderRequestCenter(requestCode=state.requestCode){
+function requestStatusMeta(status='received'){
+  const vi={received:{stage:1,label:'Đã tiếp nhận',icon:'✓'},checking:{stage:2,label:'Đang kiểm tra UID',icon:'↻'},eligible:{stage:3,label:'Đủ điều kiện',icon:'✓'},needs_info:{stage:2,label:'Cần bổ sung',icon:'!'},completed:{stage:4,label:'Hoàn tất',icon:'✓'}};
+  const en={received:{stage:1,label:'Received',icon:'✓'},checking:{stage:2,label:'Checking UID',icon:'↻'},eligible:{stage:3,label:'Eligible',icon:'✓'},needs_info:{stage:2,label:'More info needed',icon:'!'},completed:{stage:4,label:'Completed',icon:'✓'}};
+  return (state.lang==='vi'?vi:en)[status]||(state.lang==='vi'?vi:en).received
+}
+function requestTimelineClass(status,stage,n){
+  if(status==='completed')return n<=4?'done':'waiting';
+  if(status==='received')return n===1?'done':'waiting';
+  if(status==='eligible')return n<=3?'done':'waiting';
+  if(n<stage)return 'done';
+  if(n===stage)return 'current';
+  return 'waiting'
+}
+async function refreshRequestStatus(requestId,rerender=true){
+  const endpoint=uidApiUrl();const normalized=String(requestId||'').trim().toUpperCase();if(!endpoint||!normalized)return false;
+  try{
+    const url=new URL(endpoint,location.href);url.searchParams.set('requestId',normalized);
+    const response=await fetch(url.toString(),{method:'GET',headers:{'accept':'application/json'},cache:'no-store'});
+    const data=await response.json().catch(()=>({}));if(!response.ok||!data.ok||!data.status)return false;
+    const history=requestHistory();const index=history.findIndex(item=>item.requestId.toUpperCase()===normalized);if(index<0)return false;
+    const changed=history[index].status!==data.status||history[index].updatedAt!==data.updatedAt;
+    history[index]={...history[index],status:data.status,updatedAt:data.updatedAt||history[index].updatedAt};safeStorageSet(UID_HISTORY_KEY,JSON.stringify(history.slice(0,20)));
+    const last=readStoredJSON(UID_LAST_KEY,null);if(last?.requestId?.toUpperCase()===normalized)safeStorageSet(UID_LAST_KEY,JSON.stringify({...last,status:data.status,updatedAt:data.updatedAt||last.updatedAt}));
+    if(changed&&rerender)renderRequestCenter(normalized,true);return changed
+  }catch{return false}
+}
+function renderRequestCenter(requestCode=state.requestCode,skipRemote=false){
   const receipt=document.getElementById('requestReceipt');const activity=document.getElementById('requestActivity');if(!receipt||!activity)return;
   const dict=I18N[state.lang];const history=requestHistory();const normalized=String(requestCode||'').trim().toUpperCase();const selected=history.find(item=>item.requestId.toUpperCase()===normalized)||(normalized?'':history[0]);
   if(!selected){receipt.innerHTML=`<div class="request-empty">${normalized?dict['requests.notFound']:dict['requests.empty']}</div>`}else{
     state.requestCode=selected.requestId;const input=document.getElementById('requestCode');if(input)input.value=selected.requestId;
-    receipt.innerHTML=`<article class="request-receipt"><div class="receipt-status"><b>${escapeHTML(selected.requestId)}</b><span class="status-pill">✓ ${dict['requests.received']}</span></div><div class="request-meta"><div><span>${dict['requests.partner']}</span><strong>${escapeHTML(selected.partner)}</strong></div><div><span>${dict['requests.uid']}</span><strong>${escapeHTML(selected.uidMasked)}</strong></div><div><span>${dict['requests.account']}</span><strong>${selected.accountType==='existing'?dict['uid.existing']:dict['uid.new']}</strong></div><div><span>${dict['requests.sent']}</span><strong>${escapeHTML(requestDate(selected.sentAt))}</strong></div></div><div class="request-timeline"><div class="timeline-step done">${dict['requests.t1']}</div><div class="timeline-step waiting">${dict['requests.t2']}</div><div class="timeline-step waiting">${dict['requests.t3']}</div><div class="timeline-step waiting">${dict['requests.t4']}</div></div><p class="match-reason">${dict['requests.localNote']}</p><div class="receipt-actions"><button class="btn btn-line" data-print-request type="button">${dict['requests.print']}</button><a class="btn btn-primary" href="#how">${dict['requests.new']} →</a></div></article>`
+    const meta=requestStatusMeta(selected.status);const steps=[dict['requests.t1'],dict['requests.t2'],dict['requests.t3'],dict['requests.t4']];const timeline=steps.map((label,index)=>`<div class="timeline-step ${requestTimelineClass(selected.status||'received',meta.stage,index+1)}">${label}</div>`).join('');
+    receipt.innerHTML=`<article class="request-receipt"><div class="receipt-status"><b>${escapeHTML(selected.requestId)}</b><span class="status-pill" data-status="${escapeHTML(selected.status||'received')}">${meta.icon} ${escapeHTML(meta.label)}</span></div><div class="request-meta"><div><span>${dict['requests.partner']}</span><strong>${escapeHTML(selected.partner)}</strong></div><div><span>${dict['requests.uid']}</span><strong>${escapeHTML(selected.uidMasked)}</strong></div><div><span>${dict['requests.account']}</span><strong>${selected.accountType==='existing'?dict['uid.existing']:dict['uid.new']}</strong></div><div><span>${dict['requests.sent']}</span><strong>${escapeHTML(requestDate(selected.sentAt))}</strong></div></div><div class="request-timeline">${timeline}</div><p class="match-reason">${dict['requests.localNote']}</p><div class="receipt-actions"><button class="btn btn-line" data-print-request type="button">${dict['requests.print']}</button><a class="btn btn-primary" href="#how">${dict['requests.new']} →</a></div></article>`
+    if(!skipRemote)refreshRequestStatus(selected.requestId)
   }
-  activity.innerHTML=history.length?history.slice(0,8).map(item=>`<button class="activity-item" data-request-id="${escapeHTML(item.requestId)}" type="button"><i class="activity-dot"></i><span><b>${escapeHTML(item.partner)} · ${escapeHTML(item.requestId)}</b><p>${dict['requests.feedReceived']}</p><time>${escapeHTML(requestDate(item.sentAt))}</time></span></button>`).join(''):`<div class="request-empty">${dict['requests.empty']}</div>`
+  activity.innerHTML=history.length?history.slice(0,8).map(item=>{const meta=requestStatusMeta(item.status);return `<button class="activity-item" data-request-id="${escapeHTML(item.requestId)}" type="button"><i class="activity-dot"></i><span><b>${escapeHTML(item.partner)} · ${escapeHTML(item.requestId)}</b><p>${escapeHTML(meta.label)}</p><time>${escapeHTML(requestDate(item.sentAt))}</time></span></button>`}).join(''):`<div class="request-empty">${dict['requests.empty']}</div>`
 }
 function renderUidPartners(){const select=document.getElementById('uidPartner');if(!select)return;const draft=readStoredJSON(UID_DRAFT_KEY);const previous=select.value||draft.partner||state.guidePartner;select.innerHTML=[...exchanges].sort((a,b)=>a.name.localeCompare(b.name)).map(e=>`<option value="${escapeHTML(e.name)}">${escapeHTML(e.name)} · ${e.back}%</option>`).join('');select.value=[...select.options].some(option=>option.value===previous)?previous:state.guidePartner;updateUidSummary()}
 function uidApiUrl(){if(configuredUidApi)return configuredUidApi;if(location.hostname.endsWith('.netlify.app')||location.hostname==='localhost'||location.hostname==='127.0.0.1')return '/api/uid-check';return ''}
@@ -1332,7 +1410,8 @@ async function submitUidForm(event){
     if(currentButton){currentButton.disabled=false;currentButton.removeAttribute('aria-busy');currentButton.textContent=dict['uid.submit']}
   }
 }
-function renderAll(){renderFeatured();renderTape();Object.keys(PAGE_CATEGORY).forEach(renderCategory);renderTop();renderGuide();renderCalcOptions();updateCalc();renderRequestCenter()}
+function startRequestStatusSync(){clearInterval(startRequestStatusSync.timer);startRequestStatusSync.timer=setInterval(()=>{const route=location.hash.replace(/^#/,'').split('?')[0]||'home';if(route==='requests'&&state.requestCode)refreshRequestStatus(state.requestCode)},12000)}
+function renderAll(){renderFeatured();renderTape();Object.keys(PAGE_CATEGORY).forEach(renderCategory);renderTop();renderGuide();renderCalcOptions();updateCalc();renderRequestCenter();startRequestStatusSync()}
 
 async function copyCode(btn,code){const original=btn.textContent;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(code)}else{const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}btn.textContent=ui().copied;btn.classList.add('copied');showToast(state.lang==='vi'?`Đã lưu mã ${code}`:`Code ${code} copied`);setTimeout(()=>{btn.textContent=original;btn.classList.remove('copied')},1500)}catch{btn.textContent=code;setTimeout(()=>btn.textContent=original,1800)}}
 
@@ -1388,7 +1467,38 @@ function bind(){
 }
 
 const savedGuideCategory=safeStorageGet('bb-guide-category');if(GUIDE_CATEGORIES.some(item=>item.key===savedGuideCategory))state.guideCategory=savedGuideCategory;const savedGuidePartner=safeStorageGet('bb-guide-partner');if(GUIDE_PARTNERS.includes(savedGuidePartner)){state.guidePartner=savedGuidePartner;state.guideCategory=guideCategoryFromPartner(savedGuidePartner)}const savedGuideMode=safeStorageGet('bb-guide-mode');if(['new','existing'].includes(savedGuideMode))state.guideMode=savedGuideMode;const savedGuideStage=Number(safeStorageGet(GUIDE_STAGE_KEY));if(savedGuideStage>=1&&savedGuideStage<=4)state.guideStage=savedGuideStage;
-const savedTheme=safeStorageGet('bb-theme-v2');applyTheme(savedTheme||'dark');bind();applyI18N(safeStorageGet('bb-lang')||'vi');restoreUidDraft();syncUidFromGuide(false);updateUidSummary();checkUidConnection();showPage(currentRoute());
+
+
+/* Visual magic is a progressive layer; business logic stays unchanged. */
+function initMagicUI(){
+  if(document.documentElement.dataset.magicReady==='1')return;
+  document.documentElement.dataset.magicReady='1';
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const coarse=window.matchMedia('(pointer: coarse)').matches;
+  const ambient=document.createElement('div');ambient.className='magic-ambient';ambient.setAttribute('aria-hidden','true');ambient.innerHTML='<span></span>';document.body.prepend(ambient);
+
+  const tiltSelector='.category-card,.ticket,.top-card,.match-card,.contact-card,.guide-main,.request-panel,.assistant-option,.calc-panel';
+  const sheenSelector='.top-card,.category-card,.match-card,.assistant-ref-card,.request-receipt,.calc-panel,.guide-main';
+  const revealSelector='.section-head,.stats,.category-card,.step-card,.ticket,.top-card,.top-row,.match-card,.guide-shell,.calc-panel,.contact-card,.request-panel';
+  const io=('IntersectionObserver' in window&&!reduced)?new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('magic-in');io.unobserve(entry.target)}}),{threshold:.08,rootMargin:'0px 0px -7% 0px'}):null;
+  let revealIndex=0;
+  const enhance=(root=document)=>{
+    root.querySelectorAll?.(tiltSelector).forEach(el=>el.classList.add('magic-tilt'));
+    root.querySelectorAll?.(sheenSelector).forEach(el=>{el.classList.add('magic-sheen');if(!el.querySelector(':scope > .magic-sheen-layer')){const layer=document.createElement('i');layer.className='magic-sheen-layer';layer.setAttribute('aria-hidden','true');el.appendChild(layer)}});
+    root.querySelectorAll?.(revealSelector).forEach(el=>{if(el.dataset.magicReveal)return;el.dataset.magicReveal='1';el.classList.add('magic-reveal');el.style.setProperty('--reveal-delay',`${Math.min((revealIndex++%5)*55,220)}ms`);if(io)io.observe(el);else el.classList.add('magic-in')});
+  };
+  enhance();
+  const mo=new MutationObserver(records=>records.forEach(record=>record.addedNodes.forEach(node=>{if(node.nodeType===1){if(node.matches?.(tiltSelector))node.classList.add('magic-tilt');if(node.matches?.(sheenSelector)){node.classList.add('magic-sheen');if(!node.querySelector(':scope > .magic-sheen-layer')){const layer=document.createElement('i');layer.className='magic-sheen-layer';layer.setAttribute('aria-hidden','true');node.appendChild(layer)}}enhance(node)}})));
+  mo.observe(document.body,{childList:true,subtree:true});
+
+  let raf=0,lastEvent=null;
+  const paintPointer=()=>{raf=0;const e=lastEvent;if(!e)return;document.documentElement.style.setProperty('--magic-x',`${e.clientX}px`);document.documentElement.style.setProperty('--magic-y',`${e.clientY}px`);const card=e.target.closest?.('.magic-tilt');document.querySelectorAll('.magic-tilt.magic-active').forEach(el=>{if(el!==card){el.classList.remove('magic-active');el.style.setProperty('--rx','0deg');el.style.setProperty('--ry','0deg')}});if(card&&!coarse&&!reduced&&innerWidth>900){const r=card.getBoundingClientRect();const px=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));const py=Math.max(0,Math.min(1,(e.clientY-r.top)/r.height));card.classList.add('magic-active');card.style.setProperty('--mx',`${px*100}%`);card.style.setProperty('--my',`${py*100}%`);card.style.setProperty('--ry',`${(px-.5)*5.2}deg`);card.style.setProperty('--rx',`${(.5-py)*4.2}deg`)}};
+  if(!coarse&&!reduced){document.addEventListener('pointermove',e=>{lastEvent=e;if(!raf)raf=requestAnimationFrame(paintPointer)},{passive:true});document.addEventListener('pointerout',e=>{const card=e.target.closest?.('.magic-tilt');if(card&&!card.contains(e.relatedTarget)){card.classList.remove('magic-active');card.style.setProperty('--rx','0deg');card.style.setProperty('--ry','0deg')}})}
+
+  document.addEventListener('click',e=>{const target=e.target.closest('button,.btn,.top-tab,.guide-mode,.assistant-option,.activity-item');if(!target||reduced)return;const r=target.getBoundingClientRect();const burst=document.createElement('i');burst.className='magic-burst';burst.style.setProperty('--bx',`${e.clientX-r.left}px`);burst.style.setProperty('--by',`${e.clientY-r.top}px`);target.classList.add('magic-burst-host');target.appendChild(burst);setTimeout(()=>{burst.remove();target.classList.remove('magic-burst-host')},650)},true);
+}
+
+const savedTheme=safeStorageGet('bb-theme-v2');applyTheme(savedTheme||'dark');bind();applyI18N(safeStorageGet('bb-lang')||'vi');restoreUidDraft();syncUidFromGuide(false);updateUidSummary();checkUidConnection();showPage(currentRoute());initMagicUI();
 </script>
 </body>
 </html>
