@@ -1,4 +1,24 @@
+import { getStore } from "@netlify/blobs";
+
 const MAX_BODY_BYTES = 10_000;
+const STORE_NAME = "bigbrovn-uid-requests";
+const STATUS_BY_CODE = {
+  r: "received",
+  c: "checking",
+  e: "eligible",
+  n: "needs_info",
+  d: "completed",
+};
+const CODE_BY_STATUS = Object.fromEntries(
+  Object.entries(STATUS_BY_CODE).map(([code, status]) => [status, code]),
+);
+const STATUS_LABEL = {
+  received: "✅ Đã tiếp nhận",
+  checking: "🔎 Đang kiểm tra UID",
+  eligible: "✅ Đủ điều kiện",
+  needs_info: "⚠️ Cần bổ sung",
+  completed: "🎉 Hoàn tất",
+};
 
 function corsOrigin(request) {
   const origin = request.headers.get("origin") || "";
@@ -41,6 +61,174 @@ function multiLine(value, maxLength) {
     .slice(0, maxLength);
 }
 
+function requestStore() {
+  return getStore(STORE_NAME);
+}
+
+function requestKey(requestId) {
+  return `request-${String(requestId || "").trim().toUpperCase()}`;
+}
+
+async function saveRequest(record) {
+  await requestStore().setJSON(requestKey(record.requestId), record);
+}
+
+async function getRequest(requestId) {
+  const id = String(requestId || "").trim().toUpperCase();
+  if (!/^[A-Z0-9-]{6,24}$/.test(id)) return null;
+  return requestStore().get(requestKey(id), { type: "json", consistency: "strong" });
+}
+
+function base64Url(bytes) {
+  let binary = "";
+  for (const byte of bytes) binary += String.fromCharCode(byte);
+  return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/g, "");
+}
+
+async function callbackSignature(requestId, code, secret) {
+  const key = await crypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"],
+  );
+  const signature = await crypto.subtle.sign(
+    "HMAC",
+    key,
+    new TextEncoder().encode(`${requestId}:${code}`),
+  );
+  return base64Url(new Uint8Array(signature)).slice(0, 14);
+}
+
+async function callbackData(requestId, status, secret) {
+  const code = CODE_BY_STATUS[status];
+  const signature = await callbackSignature(requestId, code, secret);
+  return `bb:${requestId}:${code}:${signature}`;
+}
+
+async function statusKeyboard(requestId, secret) {
+  return {
+    inline_keyboard: [
+      [{ text: "🔎 Đang kiểm tra UID", callback_data: await callbackData(requestId, "checking", secret) }],
+      [
+        { text: "✅ Đủ điều kiện", callback_data: await callbackData(requestId, "eligible", secret) },
+        { text: "⚠️ Cần bổ sung", callback_data: await callbackData(requestId, "needs_info", secret) },
+      ],
+      [{ text: "🎉 Hoàn tất", callback_data: await callbackData(requestId, "completed", secret) }],
+    ],
+  };
+}
+
+async function telegramCall(botToken, method, body) {
+  const response = await fetch(`https://api.telegram.org/bot${botToken}/${method}`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok || data.ok === false) {
+    throw new Error(`Telegram ${method} failed: ${response.status}`);
+  }
+  return data;
+}
+
+async function ensureTelegramWebhook(request, botToken) {
+  try {
+    const webhookUrl = new URL(request.url);
+    webhookUrl.search = "";
+    webhookUrl.hash = "";
+    const body = {
+      url: webhookUrl.toString(),
+      allowed_updates: ["callback_query"],
+    };
+    if (process.env.TELEGRAM_WEBHOOK_SECRET) {
+      body.secret_token = process.env.TELEGRAM_WEBHOOK_SECRET;
+    }
+    await telegramCall(botToken, "setWebhook", body);
+  } catch (error) {
+    console.error("Telegram webhook setup failed", error instanceof Error ? error.message : "unknown");
+  }
+}
+
+async function handleTelegramCallback(request, payload, botToken, chatId) {
+  const callback = payload?.callback_query;
+  if (!callback) return null;
+
+  if (
+    process.env.TELEGRAM_WEBHOOK_SECRET &&
+    request.headers.get("x-telegram-bot-api-secret-token") !== process.env.TELEGRAM_WEBHOOK_SECRET
+  ) {
+    return reply(request, { ok: false }, 403);
+  }
+
+  const data = String(callback.data || "");
+  const match = /^bb:([A-Z0-9-]{6,24}):([rcend]):([A-Za-z0-9_-]{8,24})$/.exec(data);
+  if (!match) return reply(request, { ok: true });
+
+  const [, requestId, code, receivedSignature] = match;
+  const expectedChat = String(chatId);
+  const callbackChat = String(callback?.message?.chat?.id ?? "");
+  const secret = process.env.TELEGRAM_CALLBACK_SECRET || botToken;
+  const expectedSignature = await callbackSignature(requestId, code, secret);
+
+  if (callbackChat !== expectedChat || receivedSignature !== expectedSignature) {
+    try {
+      await telegramCall(botToken, "answerCallbackQuery", {
+        callback_query_id: callback.id,
+        text: "Nút không hợp lệ hoặc đã hết hiệu lực.",
+        show_alert: true,
+      });
+    } catch {}
+    return reply(request, { ok: true });
+  }
+
+  const status = STATUS_BY_CODE[code];
+  const record = await getRequest(requestId);
+  if (!record) {
+    try {
+      await telegramCall(botToken, "answerCallbackQuery", {
+        callback_query_id: callback.id,
+        text: "Không tìm thấy yêu cầu này.",
+        show_alert: true,
+      });
+    } catch {}
+    return reply(request, { ok: true });
+  }
+
+  const updated = {
+    ...record,
+    status,
+    updatedAt: new Date().toISOString(),
+    updatedBy: oneLine(callback?.from?.username || callback?.from?.first_name || "telegram", 80),
+  };
+  await saveRequest(updated);
+
+  const keyboard = await statusKeyboard(requestId, secret);
+  const messageText = `${record.baseText}\n\nTrạng thái: ${STATUS_LABEL[status]}`;
+
+  try {
+    await telegramCall(botToken, "editMessageText", {
+      chat_id: chatId,
+      message_id: callback.message.message_id,
+      text: messageText,
+      disable_web_page_preview: true,
+      reply_markup: keyboard,
+    });
+  } catch (error) {
+    console.error("Telegram editMessageText failed", error instanceof Error ? error.message : "unknown");
+  }
+
+  try {
+    await telegramCall(botToken, "answerCallbackQuery", {
+      callback_query_id: callback.id,
+      text: STATUS_LABEL[status],
+    });
+  } catch {}
+
+  return reply(request, { ok: true });
+}
+
 export default async (request) => {
   const origin = request.headers.get("origin") || "";
   const allowedOrigin = corsOrigin(request);
@@ -51,7 +239,7 @@ export default async (request) => {
       status: 204,
       headers: {
         "access-control-allow-origin": allowedOrigin,
-        "access-control-allow-methods": "POST, OPTIONS",
+        "access-control-allow-methods": "GET, POST, OPTIONS",
         "access-control-allow-headers": "content-type",
         "access-control-max-age": "86400",
         "vary": "Origin",
@@ -60,6 +248,25 @@ export default async (request) => {
   }
 
   if (request.method === "GET") {
+    if (origin && !allowedOrigin) return reply(request, { ok: false }, 403);
+    const url = new URL(request.url);
+    const requestId = oneLine(url.searchParams.get("requestId"), 24).toUpperCase();
+    if (requestId) {
+      try {
+        const record = await getRequest(requestId);
+        if (!record) return reply(request, { ok: false, code: "not_found" }, 404);
+        return reply(request, {
+          ok: true,
+          requestId: record.requestId,
+          status: record.status || "received",
+          updatedAt: record.updatedAt || record.sentAt || null,
+        });
+      } catch (error) {
+        console.error("Status lookup failed", error instanceof Error ? error.message : "unknown");
+        return reply(request, { ok: false }, 503);
+      }
+    }
+
     const configured = Boolean(
       process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID,
     );
@@ -84,6 +291,15 @@ export default async (request) => {
   } catch {
     return reply(request, { ok: false }, 400);
   }
+
+  const botToken = process.env.TELEGRAM_BOT_TOKEN;
+  const chatId = process.env.TELEGRAM_CHAT_ID;
+  if (!botToken || !chatId) {
+    return reply(request, { ok: false, code: "telegram_not_configured" }, 503);
+  }
+
+  const callbackResponse = await handleTelegramCallback(request, payload, botToken, chatId);
+  if (callbackResponse) return callbackResponse;
 
   // Honeypot submissions receive a neutral response without reaching Telegram.
   if (oneLine(payload.website, 100)) return reply(request, { ok: true });
@@ -111,19 +327,14 @@ export default async (request) => {
     return reply(request, { ok: false }, 422);
   }
 
-  const botToken = process.env.TELEGRAM_BOT_TOKEN;
-  const chatId = process.env.TELEGRAM_CHAT_ID;
-  if (!botToken || !chatId) {
-    return reply(request, { ok: false, code: "telegram_not_configured" }, 503);
-  }
-
-  const requestId = crypto.randomUUID().slice(0, 8).toUpperCase();
+  const requestId = crypto.randomUUID().replaceAll("-", "").slice(0, 12).toUpperCase();
+  const sentAt = new Date().toISOString();
   const submittedAt = new Intl.DateTimeFormat("vi-VN", {
     timeZone: "Asia/Ho_Chi_Minh",
     dateStyle: "short",
     timeStyle: "medium",
   }).format(new Date());
-  const text = [
+  const baseText = [
     "🔔 YÊU CẦU KIỂM TRA UID",
     `Mã yêu cầu: #${requestId}`,
     "",
@@ -138,23 +349,48 @@ export default async (request) => {
     `Nguồn: ${page}`,
   ].join("\n");
 
+  const record = {
+    requestId,
+    partner,
+    category,
+    uid,
+    accountType: payload.accountType === "existing" ? "existing" : "new",
+    contactChannel,
+    contact,
+    note,
+    page,
+    status: "received",
+    sentAt,
+    updatedAt: sentAt,
+    baseText,
+  };
+
   try {
-    const telegramResponse = await fetch(
-      `https://api.telegram.org/bot${botToken}/sendMessage`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          chat_id: chatId,
-          text,
-          disable_web_page_preview: true,
-        }),
-      },
-    );
-    if (!telegramResponse.ok) {
-      console.error("Telegram sendMessage failed", telegramResponse.status);
-      return reply(request, { ok: false }, 502);
+    await saveRequest(record);
+  } catch (error) {
+    console.error("UID request storage failed", error instanceof Error ? error.message : "unknown");
+    return reply(request, { ok: false, code: "storage_failed" }, 503);
+  }
+
+  const secret = process.env.TELEGRAM_CALLBACK_SECRET || botToken;
+  const keyboard = await statusKeyboard(requestId, secret);
+
+  // Makes the inline buttons work without a separate manual webhook setup step.
+  await ensureTelegramWebhook(request, botToken);
+
+  try {
+    const telegramResponse = await telegramCall(botToken, "sendMessage", {
+      chat_id: chatId,
+      text: `${baseText}\n\nTrạng thái: ${STATUS_LABEL.received}`,
+      disable_web_page_preview: true,
+      reply_markup: keyboard,
+    });
+
+    const messageId = telegramResponse?.result?.message_id;
+    if (messageId) {
+      await saveRequest({ ...record, telegramMessageId: messageId });
     }
+
     return reply(request, { ok: true, requestId });
   } catch (error) {
     console.error("UID notification failed", error instanceof Error ? error.message : "unknown");
