@@ -1736,6 +1736,140 @@ html[data-theme="light"] .top-card:first-child{
   background:linear-gradient(145deg,rgba(var(--gold-rgb),.07),#fff 58%)!important
 }
 
+
+/* === REBATE CLARITY v25 ===
+   Make "back %" impossible to confuse with % of trading volume.
+   Keep the UI compact, automatic and visually calm. */
+
+.ticket-rate{
+  min-width:92px
+}
+.ticket-rate span{
+  color:var(--paper-muted)!important;
+  font-size:9px!important;
+  line-height:1.15!important;
+  letter-spacing:.07em!important
+}
+.ticket-rate small{
+  display:block;
+  max-width:116px;
+  margin-top:4px;
+  color:var(--paper-muted);
+  font-size:9px;
+  font-weight:650;
+  line-height:1.2
+}
+#featuredGrid .ticket:nth-child(1) .ticket-rate small{
+  font-size:10px
+}
+.top-rate small{
+  max-width:155px!important;
+  font-size:10px!important;
+  line-height:1.35!important
+}
+.match-rate-label{
+  display:block;
+  margin-top:22px;
+  color:var(--muted);
+  font-size:9px;
+  font-weight:800;
+  line-height:1.3;
+  letter-spacing:.07em;
+  text-transform:uppercase
+}
+.match-rate-label+.match-score{
+  margin-top:5px!important
+}
+
+/* Estimated fee field */
+.calc-fee-control{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:8px;
+  align-items:stretch
+}
+.calc-fee-reset{
+  min-height:48px;
+  padding:0 12px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--ink);
+  color:var(--muted);
+  font-size:11px;
+  font-weight:750;
+  white-space:nowrap
+}
+.calc-fee-reset:hover{
+  border-color:rgba(var(--cash-rgb),.30);
+  color:var(--text)
+}
+.calc-fee-helper{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-top:8px;
+  color:var(--muted);
+  font-size:10.5px;
+  line-height:1.45
+}
+.calc-fee-status{
+  flex:0 0 auto;
+  padding:4px 6px;
+  border:1px solid rgba(var(--cash-rgb),.22);
+  border-radius:999px;
+  background:rgba(var(--cash-rgb),.055);
+  color:var(--cash);
+  font-size:8px;
+  font-weight:850;
+  line-height:1;
+  letter-spacing:.055em
+}
+.calc-fee-status[data-mode="custom"]{
+  border-color:rgba(var(--gold-rgb),.24);
+  background:rgba(var(--gold-rgb),.055);
+  color:var(--gold)
+}
+
+/* Clarification directly beside the result, where users are most likely to read it */
+.calc-disclosure{
+  margin-top:16px;
+  padding:13px 14px;
+  border:1px solid rgba(var(--gold-rgb),.20);
+  border-left:3px solid var(--gold);
+  border-radius:10px;
+  background:rgba(var(--gold-rgb),.045)
+}
+.calc-disclosure strong{
+  display:block;
+  color:var(--paper-ink);
+  font-size:12px;
+  line-height:1.4
+}
+.calc-disclosure p{
+  margin-top:5px;
+  color:var(--paper-muted);
+  font-size:10.5px;
+  line-height:1.55
+}
+
+/* Light mode remains clean */
+html[data-theme="light"] .calc-fee-reset{
+  background:#f7f8f8;
+  border-color:rgba(21,28,35,.10);
+  color:#5f666d
+}
+html[data-theme="light"] .calc-disclosure{
+  background:#fff9ec;
+  border-color:rgba(var(--gold-rgb),.16)
+}
+
+/* Avoid adding height on small screens */
+@media(max-width:620px){
+  .calc-fee-control{grid-template-columns:1fr}
+  .calc-fee-reset{min-height:40px}
+  .calc-fee-helper{align-items:flex-start}
+}
+
 </style>
 </head>
 <body>
@@ -1887,7 +2021,7 @@ html[data-theme="light"] .top-card:first-child{
 
   <section class="page" data-page="calculator">
     <header class="page-hero"><div class="wrap"><span class="eyebrow" data-i18n="calc.eyebrow">CÔNG CỤ TÍNH HOÀN PHÍ</span><h1 data-i18n="calc.title">Tính hoàn phí Crypto</h1><p data-i18n="calc.sub">Ước tính theo phí và khối lượng giao dịch.</p></div></header>
-    <div class="section"><div class="wrap"><div class="calc-panel"><div class="calc-form"><div class="field"><label data-i18n="calc.partner" for="calcExchange">Crypto Exchange</label><select id="calcExchange"></select></div><div class="field-row"><div class="field"><label data-i18n="calc.product" for="calcProduct">Sản phẩm</label><select id="calcProduct"><option data-i18n="calc.spot" value="spot">Giao ngay (Spot)</option><option data-i18n="calc.futures" value="futures">Hợp đồng tương lai (Futures)</option></select></div><div class="field"><label data-i18n="calc.rate" for="calcFeeRate">Phí trung bình (%)</label><input id="calcFeeRate" max="2" min="0" step="0.001" type="number" value="0.1"/></div></div><div class="field"><div class="range-head"><label data-i18n="calc.volume" for="calcVolume">Khối lượng giao dịch mỗi tháng</label><b id="calcVolumeLabel">$10,000</b></div><input id="calcVolume" max="2000000" min="1000" step="1000" type="range" value="10000"/></div><p class="calc-note" data-i18n="calc.note">Công thức: khối lượng giao dịch × phí trung bình × tỷ lệ hoàn phí công bố. Kết quả thực tế phụ thuộc loại phí, cấp tài khoản và điều kiện chương trình.</p></div><div class="calc-out"><span class="calc-out-label" data-i18n="calc.monthly">Hoàn phí ước tính mỗi tháng</span><div class="calc-out-value" id="calcResult">$0.00</div><div class="calc-year" id="calcYear">$0.00 / năm</div><div class="calc-out-rule"></div><div class="calc-row"><span data-i18n="calc.outPartner">Đối tác</span><span id="calcPartnerOut">—</span></div><div class="calc-row"><span data-i18n="calc.outProduct">Sản phẩm</span><span id="calcProductOut">—</span></div><div class="calc-row"><span data-i18n="calc.outRate">Phí trung bình</span><span id="calcRateOut">—</span></div><div class="calc-row"><span data-i18n="calc.outFee">Phí đã trả ước tính</span><span id="calcFeeOut">—</span></div><div class="calc-row"><span data-i18n="calc.outBack">Mức hoàn phí công bố</span><span id="calcBackOut">—</span></div></div></div>
+    <div class="section"><div class="wrap"><div class="calc-panel"><div class="calc-form"><div class="field"><label data-i18n="calc.partner" for="calcExchange">Crypto Exchange</label><select id="calcExchange"></select></div><div class="field-row"><div class="field"><label data-i18n="calc.product" for="calcProduct">Sản phẩm</label><select id="calcProduct"><option data-i18n="calc.spot" value="spot">Giao ngay (Spot)</option><option data-i18n="calc.futures" value="futures">Hợp đồng tương lai (Futures)</option></select></div><div class="field calc-fee-field"><label data-i18n="calc.rate" for="calcFeeRate">Phí giao dịch ước tính (%)</label><div class="calc-fee-control"><input id="calcFeeRate" max="2" min="0" step="0.001" type="number" value="0.1"/><button class="calc-fee-reset" id="calcFeeAuto" data-i18n="calc.useRef" type="button">Dùng mức tham chiếu</button></div><div class="calc-fee-helper" aria-live="polite"><span class="calc-fee-status" id="calcFeeStatus">THAM CHIẾU</span><span id="calcFeeHelp"></span></div></div></div><div class="field"><div class="range-head"><label data-i18n="calc.volume" for="calcVolume">Khối lượng giao dịch mỗi tháng</label><b id="calcVolumeLabel">$10,000</b></div><input id="calcVolume" max="2000000" min="1000" step="1000" type="range" value="10000"/></div><p class="calc-note" data-i18n="calc.note">Ước tính = khối lượng giao dịch × phí giao dịch ước tính × mức hoàn tối đa công bố. Phí Maker/Taker, cấp VIP, sản phẩm và điều kiện chương trình có thể làm số thực nhận khác đi.</p></div><div class="calc-out"><span class="calc-out-label" data-i18n="calc.monthly">Hoàn phí ước tính — không phải cam kết</span><div class="calc-out-value" id="calcResult">$0.00</div><div class="calc-year" id="calcYear">$0.00 / năm</div><div class="calc-out-rule"></div><div class="calc-row"><span data-i18n="calc.outPartner">Đối tác</span><span id="calcPartnerOut">—</span></div><div class="calc-row"><span data-i18n="calc.outProduct">Sản phẩm</span><span id="calcProductOut">—</span></div><div class="calc-row"><span data-i18n="calc.outRate">Phí giao dịch ước tính</span><span id="calcRateOut">—</span></div><div class="calc-row"><span data-i18n="calc.outFee">Phí giao dịch ước tính</span><span id="calcFeeOut">—</span></div><div class="calc-row"><span data-i18n="calc.outBack">Mức hoàn tối đa công bố</span><span id="calcBackOut">—</span></div><div class="calc-disclosure" role="note"><strong id="calcDisclosureTitle"></strong><p id="calcDisclosureText"></p></div></div></div>
       <div id="calcRebateCenter"></div>
     </div></div>
   </section>
@@ -1976,16 +2110,16 @@ vi:{
   'featured.eyebrow':'NỔI BẬT','featured.title':'Một số chương trình chính',
   'steps.eyebrow':'3 BƯỚC','steps.title':'Cách nhận hoàn phí','steps.t1':'Chọn đối tác','steps.p1':'Chọn nhóm và đối tác phù hợp.','steps.t2':'Đăng ký đúng link','steps.p2':'Mở đúng link hoặc dùng đúng mã.','steps.t3':'Giao dịch và nhận hoàn phí','steps.p3':'Nhận hoàn phí theo chu kỳ của đối tác.',
   'crypto.eyebrow':'HOÀN PHÍ TIỀN MÃ HÓA','crypto.title':'Hoàn phí Crypto','crypto.sub':'Spot và Futures. Mức thực tế tùy sản phẩm và cấp tài khoản.','forex.eyebrow':'HOÀN PHÍ FOREX / CFD','forex.title':'Hoàn phí Forex / CFD','forex.sub':'Có thể tính theo lot, commission hoặc chính sách IB.','dex.eyebrow':'HOÀN PHÍ TRÊN CHUỖI','dex.title':'Hoàn phí DEX / Perps','dex.sub':'Kiểm tra đúng mạng lưới, ví và mã giới thiệu.','casino.eyebrow':'CHƯƠNG TRÌNH KHÁC','casino.title':'Khác','casino.sub':'Hiện có đối tác Winz. 18+. Sử dụng có trách nhiệm.',
-  'common.calculate':'Tính thử hoàn phí','common.support':'Hỏi điều kiện','common.viewOffers':'Xem chương trình','search.crypto':'Tìm sàn crypto...','search.forex':'Tìm nhà môi giới...','search.dex':'Tìm DEX...','search.other':'Tìm chương trình...','sort.name':'Tên A–Z','sort.rate':'Hoàn phí cao trước','notice.crypto':'Công cụ chỉ mang tính ước tính. Hãy kiểm tra sản phẩm, loại phí và chính sách tài khoản trước khi đăng ký.','notice.forex':'Forex/CFD có đòn bẩy và rủi ro mất vốn nhanh. Tỷ lệ 100% không mặc định là hoàn toàn bộ chi phí giao dịch.','notice.dex':'Kiểm tra đúng mạng lưới, ví và mã giới thiệu trước khi giao dịch. Không bao giờ chia sẻ cụm từ khôi phục hoặc khóa riêng tư.','notice.casino':'18+. Không vay tiền hoặc sử dụng tiền dành cho nhu cầu thiết yếu. Dừng lại nếu hoạt động này ảnh hưởng đến tài chính hoặc cuộc sống.',
-  'calc.eyebrow':'CÔNG CỤ TÍNH HOÀN PHÍ','calc.title':'Tính hoàn phí Crypto','calc.sub':'Ước tính theo phí và khối lượng giao dịch.','calc.partner':'Crypto Exchange','calc.product':'Sản phẩm','calc.spot':'Giao ngay (Spot)','calc.futures':'Hợp đồng tương lai (Futures)','calc.rate':'Phí trung bình (%)','calc.volume':'Khối lượng giao dịch mỗi tháng','calc.note':'Công thức: khối lượng giao dịch × phí trung bình × tỷ lệ hoàn phí công bố. Kết quả thực tế phụ thuộc loại phí, cấp tài khoản và điều kiện chương trình.','calc.monthly':'Hoàn phí ước tính mỗi tháng','calc.outPartner':'Đối tác','calc.outProduct':'Sản phẩm','calc.outRate':'Phí trung bình','calc.outFee':'Phí đã trả ước tính','calc.outBack':'Mức hoàn phí công bố',
+  'common.calculate':'Tính thử hoàn phí','common.support':'Hỏi điều kiện','common.viewOffers':'Xem chương trình','search.crypto':'Tìm sàn crypto...','search.forex':'Tìm nhà môi giới...','search.dex':'Tìm DEX...','search.other':'Tìm chương trình...','sort.name':'Tên A–Z','sort.rate':'Mức hoàn tối đa cao trước','notice.crypto':'Công cụ chỉ mang tính ước tính. Hãy kiểm tra sản phẩm, loại phí và chính sách tài khoản trước khi đăng ký.','notice.forex':'Forex/CFD có đòn bẩy và rủi ro mất vốn nhanh. Tỷ lệ 100% không mặc định là hoàn toàn bộ chi phí giao dịch.','notice.dex':'Kiểm tra đúng mạng lưới, ví và mã giới thiệu trước khi giao dịch. Không bao giờ chia sẻ cụm từ khôi phục hoặc khóa riêng tư.','notice.casino':'18+. Không vay tiền hoặc sử dụng tiền dành cho nhu cầu thiết yếu. Dừng lại nếu hoạt động này ảnh hưởng đến tài chính hoặc cuộc sống.',
+  'calc.eyebrow':'CÔNG CỤ TÍNH HOÀN PHÍ','calc.title':'Tính hoàn phí Crypto','calc.sub':'Ước tính minh bạch theo volume, phí giao dịch và mức hoàn tối đa công bố.','calc.partner':'Crypto Exchange','calc.product':'Sản phẩm','calc.spot':'Giao ngay (Spot)','calc.futures':'Hợp đồng tương lai (Futures)','calc.rate':'Phí giao dịch ước tính (%)','calc.useRef':'Dùng mức tham chiếu','calc.volume':'Khối lượng giao dịch mỗi tháng','calc.note':'Ước tính = khối lượng giao dịch × phí giao dịch ước tính × mức hoàn tối đa công bố. Phí Maker/Taker, cấp VIP, sản phẩm và điều kiện chương trình có thể làm số thực nhận khác đi.','calc.monthly':'Hoàn phí ước tính — không phải cam kết','calc.outPartner':'Đối tác','calc.outProduct':'Sản phẩm','calc.outRate':'Phí giao dịch ước tính','calc.outFee':'Phí giao dịch ước tính','calc.outBack':'Mức hoàn tối đa công bố',
   'how.eyebrow':'TRỢ LÝ NHẬN HOÀN PHÍ','how.title':'Hướng dẫn nhận hoàn phí','how.sub':'Chọn nhóm và đối tác để bắt đầu.','how.p1':'Chọn nhóm và đối tác.','how.p2':'Mở đúng liên kết hoặc dùng đúng mã.','how.p3':'Nhận hoàn phí theo chu kỳ của đối tác.',
   'top.eyebrow':'MẠNG LƯỚI BIGBROVN','top.title':'Kênh đối tác','top.sub':'','top.all':'Tất cả','top.leaderEyebrow':'ĐỐI TÁC ƯU TIÊN','top.leaderTitle':'3 đối tác nổi bật','top.remainingEyebrow':'DANH SÁCH ƯU TIÊN','top.compare':'Các đối tác khác','top.note':'Ưu tiên theo độ phổ biến, quy mô và thông tin pháp lý công bố. Mức hoàn phí không quyết định thứ tự.',
   'match.eyebrow':'GỢI Ý THÔNG MINH','match.title':'Tìm kênh phù hợp','match.sub':'Chọn nhu cầu, BIGBROVN sẽ rút gọn danh sách còn ba đối tác phù hợp nhất.','match.group':'Nhóm giao dịch','match.account':'Tình trạng tài khoản','match.priority':'Ưu tiên của bạn','match.trust':'Độ phổ biến','match.rate':'Mức hoàn phí','match.support':'Hỗ trợ nhanh','match.submit':'Tìm đối tác →','match.best':'Phù hợp nhất','match.use':'Chọn đối tác này','match.reasonTrust':'Phổ biến và dễ tiếp cận','match.reasonRate':'Mức hoàn phí nổi bật trong nhóm','match.reasonSupport':'Phù hợp để gửi UID kiểm tra',
   'requests.eyebrow':'YÊU CẦU CỦA BẠN','requests.title':'Tra cứu hoàn phí','requests.sub':'Nhập mã BB để xem phiếu và trạng thái yêu cầu đã gửi trên thiết bị này.','requests.search':'Tra cứu →','requests.receipt':'Phiếu yêu cầu','requests.device':'Dữ liệu trên thiết bị này','requests.activity':'Hoạt động gần đây','requests.empty':'Chưa có yêu cầu nào trên thiết bị này.','requests.notFound':'Không tìm thấy mã yêu cầu trên thiết bị này.','requests.received':'Đã tiếp nhận','requests.code':'Mã yêu cầu','requests.partner':'Đối tác','requests.uid':'UID','requests.account':'Tài khoản','requests.sent':'Thời gian gửi','requests.t1':'Đã tiếp nhận','requests.t2':'Kiểm tra UID','requests.t3':'Xác nhận điều kiện','requests.t4':'Hoàn tất','requests.print':'In phiếu','requests.new':'Gửi thêm UID','requests.localNote':'Trạng thái được đồng bộ tự động sau khi BIGBROVN xác nhận trên Telegram.','requests.feedReceived':'Yêu cầu đã được chuyển đến BIGBROVN.',
   'uid.title':'Gửi UID','uid.sub':'','uid.partner':'Đối tác','uid.account':'Tình trạng tài khoản','uid.new':'Tài khoản mới','uid.existing':'Tài khoản đã có','uid.channel':'Kênh liên hệ','uid.contact':'Thông tin liên hệ','uid.note':'Ghi chú','uid.uidPlaceholder':'Nhập UID tài khoản','uid.contactPlaceholder':'@tên_người_dùng hoặc số điện thoại','uid.notePlaceholder':'Ví dụ: đã xác minh tài khoản, đăng ký bằng liên kết BIGBROVN...','uid.privacy':'Không cần tên thật. Không nhập mật khẩu, OTP, cụm từ khôi phục hoặc khóa riêng tư.','uid.submit':'Gửi UID →','uid.sending':'Đang gửi...','uid.success':'Đã gửi UID. BIGBROVN sẽ phản hồi qua kênh liên hệ đã cung cấp.','uid.error':'Chưa gửi được. Vui lòng thử lại hoặc liên hệ Telegram/Zalo.','uid.config':'Chưa thể gửi yêu cầu. Vui lòng dùng Telegram/Zalo.','uid.serverConfig':'Chưa thể gửi yêu cầu. Vui lòng dùng Telegram/Zalo.','uid.origin':'Chưa thể gửi từ địa chỉ này. Vui lòng dùng Telegram/Zalo.','uid.ready':'Sẵn sàng gửi','uid.checking':'Đang kiểm tra','uid.offline':'Chưa kết nối','uid.last':'Yêu cầu gần nhất','uid.open':'Mở biểu mẫu gửi UID','uid.wait':'Vui lòng chờ một chút trước khi gửi yêu cầu tiếp theo.',
-  'faq.eyebrow':'GIẢI ĐÁP','faq.title':'Câu hỏi thường gặp','faq.q1':'Tài khoản cũ có nhận hoàn phí được không?','faq.a1':'Tuỳ chính sách từng đối tác. Một số chương trình chỉ áp dụng tài khoản mới; hãy liên hệ để kiểm tra trước khi thực hiện.','faq.q2':'Con số 100% có phải hoàn toàn bộ phí giao dịch?','faq.a2':'Không nên mặc định như vậy. Tỷ lệ có thể là mức chia sẻ theo chương trình hoặc chỉ áp dụng cho sản phẩm cụ thể.','faq.q3':'Công cụ tính có cho kết quả chắc chắn không?','faq.a3':'Không. Đây là ước tính dựa trên khối lượng giao dịch, phí trung bình và mức hoàn phí công bố.','faq.q4':'BIGBROVN có thu phí tham gia không?','faq.a4':'Không thu phí tham gia. BIGBROVN có thể nhận hoa hồng giới thiệu từ đối tác khi bạn sử dụng các liên kết trên trang.','faq.q5':'Tôi có thể tạo và gửi nhiều tài khoản không?','faq.a5':'Bạn có thể gửi nhiều UID để BIGBROVN kiểm tra. Việc tạo nhiều tài khoản còn phụ thuộc chính sách của từng đối tác.',
+  'faq.eyebrow':'GIẢI ĐÁP','faq.title':'Câu hỏi thường gặp','faq.q1':'Tài khoản cũ có nhận hoàn phí được không?','faq.a1':'Tuỳ chính sách từng đối tác. Một số chương trình chỉ áp dụng tài khoản mới; hãy liên hệ để kiểm tra trước khi thực hiện.','faq.q2':'Con số 100% có phải hoàn toàn bộ phí giao dịch?','faq.a2':'Không. Ví dụ 60% không có nghĩa là nhận lại 60% giá trị giao dịch. Đây là mức hoàn tối đa công bố trên phần phí đủ điều kiện theo chương trình; mức thực tế còn phụ thuộc sản phẩm, Maker/Taker, cấp tài khoản và chính sách đối tác.','faq.q3':'Công cụ tính có cho kết quả chắc chắn không?','faq.a3':'Không. Đây là ước tính dựa trên khối lượng giao dịch, phí giao dịch ước tính và mức hoàn tối đa công bố. Số thực nhận có thể khác.','faq.q4':'BIGBROVN có thu phí tham gia không?','faq.a4':'Không thu phí tham gia. BIGBROVN có thể nhận hoa hồng giới thiệu từ đối tác khi bạn sử dụng các liên kết trên trang.','faq.q5':'Tôi có thể tạo và gửi nhiều tài khoản không?','faq.a5':'Bạn có thể gửi nhiều UID để BIGBROVN kiểm tra. Việc tạo nhiều tài khoản còn phụ thuộc chính sách của từng đối tác.',
   'contact.eyebrow':'HỖ TRỢ','contact.title':'Cần hỗ trợ?','contact.sub':'Liên hệ trực tiếp qua Telegram hoặc Zalo.','contact.tg':'Hỏi về đối tác, mã giới thiệu hoặc điều kiện tài khoản.','contact.zalo':'Kênh hỗ trợ thuận tiện cho người dùng tại Việt Nam.','contact.open':'Mở cuộc trò chuyện →',
-  'footer.desc':'Hoàn phí Crypto, Forex/CFD, DEX và Khác.','footer.rebate':'HOÀN PHÍ','footer.links':'LIÊN KẾT','footer.privacy':'Chính sách bảo mật','footer.terms':'Điều khoản sử dụng','footer.note':'Mức hoàn phí có thể thay đổi theo chính sách, loại giao dịch và cấp tài khoản. Nội dung không phải tư vấn đầu tư.'
+  'footer.desc':'Hoàn phí Crypto, Forex/CFD, DEX và Khác.','footer.rebate':'HOÀN PHÍ','footer.links':'LIÊN KẾT','footer.privacy':'Chính sách bảo mật','footer.terms':'Điều khoản sử dụng','footer.note':'Mức hiển thị là mức tối đa công bố, không phải tỷ lệ trên giá trị giao dịch. Hoàn phí thực tế phụ thuộc phần phí đủ điều kiện, sản phẩm, Maker/Taker, cấp tài khoản và chính sách đối tác. Nội dung không phải tư vấn đầu tư.'
 },
 en:{
   skip:'Skip to content','nav.home':'Home','nav.rebate':'Rebates','nav.crypto':'Crypto','nav.forex':'Forex/CFD','nav.dex':'DEX/Perps','nav.other':'Other','nav.calc':'Calculator','nav.how':'Rebate Guide','nav.top':'Partner Network','nav.requests':'Track request','visual.other':'Other',
@@ -1996,16 +2130,16 @@ en:{
   'featured.eyebrow':'FEATURED','featured.title':'Selected key programs',
   'steps.eyebrow':'3 STEPS','steps.title':'How rebates work','steps.t1':'Choose a partner','steps.p1':'Choose a group and partner.','steps.t2':'Use the correct link','steps.p2':'Open the link or use the code.','steps.t3':'Trade and receive rebates','steps.p3':'Receive rebates on the partner cycle.',
   'crypto.eyebrow':'CRYPTO REBATES','crypto.title':'Crypto rebates','crypto.sub':'Spot and Futures. Actual rates depend on product and account tier.','forex.eyebrow':'FOREX / CFD REBATES','forex.title':'Forex / CFD rebates','forex.sub':'May be based on lots, commission or IB policy.','dex.eyebrow':'ON-CHAIN REBATES','dex.title':'DEX / Perps rebates','dex.sub':'Verify the network, wallet and referral code.','casino.eyebrow':'OTHER PROGRAMS','casino.title':'Other','casino.sub':'Currently includes Winz. 18+. Use responsibly.',
-  'common.calculate':'Estimate rebate','common.support':'Ask about terms','common.viewOffers':'View programs','search.crypto':'Search crypto exchanges...','search.forex':'Search brokers...','search.dex':'Search DEX...','search.other':'Search programs...','sort.name':'Name A–Z','sort.rate':'Highest rebate first','notice.crypto':'The calculator is an estimate. Check Spot/Futures, maker/taker and account terms before signing up.','notice.forex':'Leveraged Forex/CFD trading carries a high risk of rapid loss. A 100% figure does not mean every cost is refunded.','notice.dex':'Verify the network, wallet and referral before trading. Never share a seed phrase or private key.','notice.casino':'18+. Never borrow or use money needed for essentials. Stop if this activity harms your finances or life.',
-  'calc.eyebrow':'REBATE CALCULATOR','calc.title':'Crypto rebate calculator','calc.sub':'Estimate from fees and trading volume.','calc.partner':'Crypto Exchange','calc.product':'Product','calc.spot':'Spot','calc.futures':'Futures','calc.rate':'Average fee (%)','calc.volume':'Monthly trading volume','calc.note':'Formula: trading volume × average fee × displayed rebate rate. Actual results depend on fee type, account tier and program terms.','calc.monthly':'Estimated monthly rebate','calc.outPartner':'Partner','calc.outProduct':'Product','calc.outRate':'Average fee','calc.outFee':'Estimated fees paid','calc.outBack':'Displayed rebate rate',
+  'common.calculate':'Estimate rebate','common.support':'Ask about terms','common.viewOffers':'View programs','search.crypto':'Search crypto exchanges...','search.forex':'Search brokers...','search.dex':'Search DEX...','search.other':'Search programs...','sort.name':'Name A–Z','sort.rate':'Highest displayed maximum first','notice.crypto':'The calculator is an estimate. Check Spot/Futures, maker/taker and account terms before signing up.','notice.forex':'Leveraged Forex/CFD trading carries a high risk of rapid loss. A 100% figure does not mean every cost is refunded.','notice.dex':'Verify the network, wallet and referral before trading. Never share a seed phrase or private key.','notice.casino':'18+. Never borrow or use money needed for essentials. Stop if this activity harms your finances or life.',
+  'calc.eyebrow':'REBATE CALCULATOR','calc.title':'Crypto rebate calculator','calc.sub':'A transparent estimate based on volume, trading fee and the displayed maximum rebate.','calc.partner':'Crypto Exchange','calc.product':'Product','calc.spot':'Spot','calc.futures':'Futures','calc.rate':'Estimated trading fee (%)','calc.useRef':'Use reference rate','calc.volume':'Monthly trading volume','calc.note':'Estimate = trading volume × estimated trading fee × displayed maximum rebate. Maker/taker fees, VIP tier, product and program eligibility can change the amount actually received.','calc.monthly':'Estimated rebate — not a guarantee','calc.outPartner':'Partner','calc.outProduct':'Product','calc.outRate':'Estimated trading fee','calc.outFee':'Estimated trading fees','calc.outBack':'Displayed maximum rebate',
   'how.eyebrow':'REBATE ASSISTANT','how.title':'Rebate guide','how.sub':'Choose a group and partner to begin.','how.p1':'Choose a group and partner.','how.p2':'Open the link or use the code.','how.p3':'Receive rebates on the partner cycle.',
   'top.eyebrow':'TOP REBATES','top.title':'Explore standout rebates','top.sub':'','top.all':'All','top.leaderEyebrow':'PRIORITY PARTNERS','top.leaderTitle':'3 standout partners','top.remainingEyebrow':'PRIORITY LIST','top.compare':'Other partners','top.note':'Ordered by market presence, scale and published regulatory information. Rebate rate does not determine placement.',
   'match.eyebrow':'SMART MATCH','match.title':'Find your best channel','match.sub':'Choose your needs and BIGBROVN will narrow the list to three suitable partners.','match.group':'Trading group','match.account':'Account status','match.priority':'Your priority','match.trust':'Popularity','match.rate':'Rebate rate','match.support':'Fast support','match.submit':'Find partners →','match.best':'Best match','match.use':'Choose this partner','match.reasonTrust':'Popular and accessible','match.reasonRate':'A notable rate in this group','match.reasonSupport':'Suitable for UID review',
   'requests.eyebrow':'YOUR REQUESTS','requests.title':'Track rebate request','requests.sub':'Enter a BB code to view a request saved on this device.','requests.search':'Track →','requests.receipt':'Request receipt','requests.device':'Data on this device','requests.activity':'Recent activity','requests.empty':'No requests on this device yet.','requests.notFound':'This request code was not found on this device.','requests.received':'Received','requests.code':'Request code','requests.partner':'Partner','requests.uid':'UID','requests.account':'Account','requests.sent':'Submitted','requests.t1':'Received','requests.t2':'UID review','requests.t3':'Eligibility check','requests.t4':'Completed','requests.print':'Print receipt','requests.new':'Submit another UID','requests.localNote':'Status syncs automatically after BIGBROVN confirms it in Telegram.','requests.feedReceived':'The request was delivered to BIGBROVN.',
   'uid.title':'Submit UID','uid.sub':'','uid.partner':'Partner','uid.account':'Account status','uid.new':'New account','uid.existing':'Existing account','uid.channel':'Contact channel','uid.contact':'Contact details','uid.note':'Note','uid.uidPlaceholder':'Enter the account UID','uid.contactPlaceholder':'@username or phone number','uid.notePlaceholder':'Example: KYC complete, registered through BIGBROVN...','uid.privacy':'No real name is required. Never enter a password, OTP, seed phrase or private key.','uid.submit':'Submit UID →','uid.sending':'Sending...','uid.success':'UID submitted. BIGBROVN will reply through the contact provided.','uid.error':'Could not submit. Try again or contact Telegram/Zalo.','uid.config':'Submission is unavailable. Please use Telegram/Zalo.','uid.serverConfig':'Submission is unavailable. Please use Telegram/Zalo.','uid.origin':'This address is not allowed. Please use Telegram/Zalo.','uid.ready':'Ready to send','uid.checking':'Checking','uid.offline':'Not connected','uid.last':'Latest request','uid.open':'Open UID form','uid.wait':'Please wait before sending another request.',
-  'faq.eyebrow':'FAQ','faq.title':'Frequently asked questions','faq.q1':'Can an existing account receive rebates?','faq.a1':'It depends on the partner. Some programs are for new accounts only; contact support before proceeding.','faq.q2':'Does 100% mean every trading fee is refunded?','faq.a2':'Do not assume so. It may be a program sharing rate or apply only to a specific product.','faq.q3':'Is the calculator result guaranteed?','faq.a3':'No. It is an estimate based on volume, average fee and displayed rebate rate.','faq.q4':'Does BIGBROVN charge a participation fee?','faq.a4':'No participation fee is charged. BIGBROVN may receive referral commission when you use links on this site.','faq.q5':'Can I create and submit multiple accounts?','faq.a5':'You can submit multiple UIDs for review. Creating multiple accounts remains subject to each partner’s policy.',
+  'faq.eyebrow':'FAQ','faq.title':'Frequently asked questions','faq.q1':'Can an existing account receive rebates?','faq.a1':'It depends on the partner. Some programs are for new accounts only; contact support before proceeding.','faq.q2':'Does 100% mean every trading fee is refunded?','faq.a2':'No. For example, 60% does not mean 60% of trading volume. It is the displayed maximum rebate on eligible fees under the program; the actual rate can depend on product, maker/taker fees, account tier and partner policy.','faq.q3':'Is the calculator result guaranteed?','faq.a3':'No. It is an estimate based on trading volume, an estimated trading fee and the displayed maximum rebate. The amount actually received may differ.','faq.q4':'Does BIGBROVN charge a participation fee?','faq.a4':'No participation fee is charged. BIGBROVN may receive referral commission when you use links on this site.','faq.q5':'Can I create and submit multiple accounts?','faq.a5':'You can submit multiple UIDs for review. Creating multiple accounts remains subject to each partner’s policy.',
   'contact.eyebrow':'SUPPORT','contact.title':'Need help?','contact.sub':'Contact us through Telegram or Zalo.','contact.tg':'Ask about partners, referral codes or account terms.','contact.zalo':'A convenient support channel for users in Vietnam.','contact.open':'Open chat →',
-  'footer.desc':'Crypto, Forex/CFD, DEX and Other rebates.','footer.rebate':'REBATES','footer.links':'LINKS','footer.privacy':'Privacy policy','footer.terms':'Terms of use','footer.note':'Rebate rates may change by policy, product and account tier. This content is not investment advice.'
+  'footer.desc':'Crypto, Forex/CFD, DEX and Other rebates.','footer.rebate':'REBATES','footer.links':'LINKS','footer.privacy':'Privacy policy','footer.terms':'Terms of use','footer.note':'Displayed rates are published maximums, not percentages of trading volume. Actual rebates depend on eligible fees, product, maker/taker fees, account tier and partner policy. This content is not investment advice.'
 }}
 ;
 
@@ -2053,16 +2187,16 @@ function initials(name){return name.replace(/[^A-Za-z0-9]/g,'').slice(0,2).toUpp
 function logoTag(e){const url=e.name==='PieBit'?'assets/logo-piebit.jpg':(e.logo||`https://www.google.com/s2/favicons?sz=128&domain_url=https://${encodeURIComponent(e.domain)}`);return `<img alt="" decoding="async" loading="lazy" referrerpolicy="no-referrer" src="${url}" data-initials="${initials(e.name)}" onerror="logoFallback(this)"/>`}
 function logoFallback(img){const span=document.createElement('span');span.className='logo-fallback';span.textContent=img.dataset.initials||'BB';img.replaceWith(span)}
 function displayCategory(category){if(category==='Other')return state.lang==='vi'?'Khác':'Other';return category}
-function ui(){return state.lang==='vi'?{code:'MÃ GIỚI THIỆU',rate:'MỨC HOÀN PHÍ',copy:'SAO CHÉP MÃ',copied:'ĐÃ SAO CHÉP ✓',join:'ĐĂNG KÝ →',note:'Mức công bố — kiểm tra điều kiện trước khi đăng ký',partner:'đối tác',partners:'đối tác',empty:'Không tìm thấy đối tác phù hợp.'}:{code:'REFERRAL CODE',rate:'REBATE',copy:'COPY CODE',copied:'COPIED ✓',join:'REGISTER →',note:'Displayed rate — confirm terms before registering',partner:'partner',partners:'partners',empty:'No matching partner found.'}}
+function ui(){return state.lang==='vi'?{code:'MÃ GIỚI THIỆU',rate:'MỨC HOÀN TỐI ĐA',upTo:'TỐI ĐA',eligibleFee:'trên phí đủ điều kiện',copy:'SAO CHÉP MÃ',copied:'ĐÃ SAO CHÉP ✓',join:'ĐĂNG KÝ →',note:'Mức tối đa công bố — kiểm tra điều kiện trước khi đăng ký',partner:'đối tác',partners:'đối tác',empty:'Không tìm thấy đối tác phù hợp.'}:{code:'REFERRAL CODE',rate:'MAX REBATE',upTo:'UP TO',eligibleFee:'on eligible fees',copy:'COPY CODE',copied:'COPIED ✓',join:'REGISTER →',note:'Displayed maximum — confirm eligibility before registering',partner:'partner',partners:'partners',empty:'No matching partner found.'}}
 
 function guideUI(){return state.lang==='vi'?{
-  title:'Quy trình nhận hoàn phí',auto:'Đã lưu',timing:'Hoàn phí sau 1–24 giờ',steps:['Chọn đối tác','Loại tài khoản','Link & mã','Gửi UID'],stage:'BƯỚC',back:'Quay lại',next:'Tiếp tục',summary:'Thông tin đã chọn',group:'Nhóm',groupSelect:'Chọn nhóm',rate:'Mức hoàn phí công bố',account:'Tài khoản',code:'Mã giới thiệu',
+  title:'Quy trình nhận hoàn phí',auto:'Đã lưu',timing:'Hoàn phí sau 1–24 giờ',steps:['Chọn đối tác','Loại tài khoản','Link & mã','Gửi UID'],stage:'BƯỚC',back:'Quay lại',next:'Tiếp tục',summary:'Thông tin đã chọn',group:'Nhóm',groupSelect:'Chọn nhóm',rate:'Mức hoàn tối đa trên phí đủ điều kiện',account:'Tài khoản',code:'Mã giới thiệu',
   s1:'Chọn nhóm và đối tác',choose:'Chọn đối tác',
   s2:'Loại tài khoản',newTitle:'Tài khoản mới',newSub:'Chưa đăng ký hoặc muốn tạo thêm.',existingTitle:'Tài khoản đã có',existingSub:'Đã có UID.',multiHint:'Bạn có thể gửi nhiều UID. Việc tạo nhiều tài khoản phụ thuộc chính sách của từng đối tác.',
   s3:'Dùng đúng link và mã',existingS3:'Tài khoản đã có: gửi UID để kiểm tra.',open:'Mở link đăng ký →',copy:'Sao chép mã',toUid:'Gửi UID →',
   s4:'Gửi UID'
 }:{
-  title:'Rebate process',auto:'Saved',timing:'Rebate in 1–24 hours',steps:['Choose partner','Account type','Link & code','Submit UID'],stage:'STEP',back:'Back',next:'Continue',summary:'Selected details',group:'Group',groupSelect:'Choose a group',rate:'Displayed rebate',account:'Account',code:'Referral code',
+  title:'Rebate process',auto:'Saved',timing:'Rebate in 1–24 hours',steps:['Choose partner','Account type','Link & code','Submit UID'],stage:'STEP',back:'Back',next:'Continue',summary:'Selected details',group:'Group',groupSelect:'Choose a group',rate:'Maximum rebate on eligible fees',account:'Account',code:'Referral code',
   s1:'Choose a group and partner',choose:'Choose a partner',
   s2:'Account type',newTitle:'New account',newSub:'Not registered yet or creating another account.',existingTitle:'Existing account',existingSub:'UID already available.',multiHint:'You can submit multiple UIDs. Multiple-account eligibility depends on each partner’s policy.',
   s3:'Use the correct link and code',existingS3:'Existing account: submit the UID for review.',open:'Open registration link →',copy:'Copy code',toUid:'Submit UID →',
@@ -2093,8 +2227,8 @@ function renderGuide(){
   resetUidTimer();updateUidSummary();
 }
 
-function ticketHTML(e){const U=ui();const color=CAT_COLOR[e.category];const paperColor=CAT_PAPER[e.category];return `<article class="ticket" style="--cat:${color};--cat-paper:${paperColor}"><div class="ticket-top"><div class="ticket-logo">${logoTag(e)}</div><div><div class="ticket-name">${escapeHTML(e.name)}</div><div class="ticket-cat"><i></i>${escapeHTML(displayCategory(e.category))}</div></div></div><div class="ticket-rule"></div><div class="ticket-data"><div class="ticket-code">${U.code}<b>${escapeHTML(e.code)}</b></div><div class="ticket-rate"><b>${e.back}%</b></div></div><div class="ticket-actions"><button class="ticket-copy" data-copy="${escapeHTML(e.code)}" type="button">${U.copy}</button><a class="ticket-cta" href="${e.refLink}" rel="sponsored noopener noreferrer" target="_blank">${U.join}</a></div></article>`}
-function topCardHTML(e,index){const U=ui();return `<article class="top-card" data-rank="${index+1}"><div class="top-card-head"><div class="top-logo">${logoTag(e)}</div><span class="top-rank">#${index+1}</span></div><div class="top-card-body"><h3 class="top-name">${escapeHTML(e.name)}</h3><div class="top-category">${escapeHTML(displayCategory(e.category))}</div></div><div class="top-rate"><strong>${e.back}%</strong></div><div class="top-card-actions"><button class="top-code" data-copy="${escapeHTML(e.code)}" type="button"><small>${U.code}</small><b>${escapeHTML(e.code)}</b></button><a class="btn btn-primary" href="${e.refLink}" rel="sponsored noopener noreferrer" target="_blank">${U.join}</a></div></article>`}
+function ticketHTML(e){const U=ui();const color=CAT_COLOR[e.category];const paperColor=CAT_PAPER[e.category];return `<article class="ticket" style="--cat:${color};--cat-paper:${paperColor}"><div class="ticket-top"><div class="ticket-logo">${logoTag(e)}</div><div><div class="ticket-name">${escapeHTML(e.name)}</div><div class="ticket-cat"><i></i>${escapeHTML(displayCategory(e.category))}</div></div></div><div class="ticket-rule"></div><div class="ticket-data"><div class="ticket-code">${U.code}<b>${escapeHTML(e.code)}</b></div><div class="ticket-rate" title="${escapeHTML(`${U.upTo} ${e.back}% ${U.eligibleFee}`)}"><span>${U.upTo}</span><b>${e.back}%</b><small>${U.eligibleFee}</small></div></div><div class="ticket-actions"><button class="ticket-copy" data-copy="${escapeHTML(e.code)}" type="button">${U.copy}</button><a class="ticket-cta" href="${e.refLink}" rel="sponsored noopener noreferrer" target="_blank">${U.join}</a></div></article>`}
+function topCardHTML(e,index){const U=ui();return `<article class="top-card" data-rank="${index+1}"><div class="top-card-head"><div class="top-logo">${logoTag(e)}</div><span class="top-rank">#${index+1}</span></div><div class="top-card-body"><h3 class="top-name">${escapeHTML(e.name)}</h3><div class="top-category">${escapeHTML(displayCategory(e.category))}</div></div><div class="top-rate"><small>${U.upTo} · ${U.eligibleFee}</small><strong>${e.back}%</strong></div><div class="top-card-actions"><button class="top-code" data-copy="${escapeHTML(e.code)}" type="button"><small>${U.code}</small><b>${escapeHTML(e.code)}</b></button><a class="btn btn-primary" href="${e.refLink}" rel="sponsored noopener noreferrer" target="_blank">${U.join}</a></div></article>`}
 
 function renderFeatured(){const names=['Gate.io','OKX','Bybit','Binance','Exness','GMX'];const list=names.map(n=>exchanges.find(e=>e.name===n)).filter(Boolean);document.getElementById('featuredGrid').innerHTML=list.map(ticketHTML).join('')}
 function renderTape(){const items=[...exchanges,...exchanges];document.getElementById('tapeTrack').innerHTML=items.map(e=>`<span class="tape-item"><b>${e.name}</b><strong>${e.back}%</strong><span>·</span></span>`).join('')}
@@ -2109,7 +2243,7 @@ function smartMatches(categoryKey,priority){const category=GUIDE_CATEGORIES.find
 function renderMatchResults(categoryKey='crypto',account='new',priority='trust'){
   const root=document.getElementById('matchResults');if(!root)return;
   const dict=I18N[state.lang];const list=smartMatches(categoryKey,priority);const reason=dict[`match.reason${priority[0].toUpperCase()+priority.slice(1)}`]||dict['match.reasonTrust'];
-  root.hidden=false;root.innerHTML=list.map((partner,index)=>`<article class="match-card"><span class="match-badge">${index===0?dict['match.best']:`#${index+1}`}</span><div class="match-partner"><div class="ticket-logo">${logoTag(partner)}</div><b>${escapeHTML(partner.name)}</b></div><strong class="match-score">${partner.back}%</strong><p class="match-reason">${escapeHTML(reason)}</p><button class="btn ${index===0?'btn-primary':'btn-line'}" data-match-partner="${escapeHTML(partner.name)}" data-match-category="${categoryKey}" data-match-account="${account}" type="button">${dict['match.use']} →</button></article>`).join('');
+  root.hidden=false;root.innerHTML=list.map((partner,index)=>`<article class="match-card"><span class="match-badge">${index===0?dict['match.best']:`#${index+1}`}</span><div class="match-partner"><div class="ticket-logo">${logoTag(partner)}</div><b>${escapeHTML(partner.name)}</b></div><span class="match-rate-label">${state.lang==='vi'?'TỐI ĐA · PHÍ ĐỦ ĐIỀU KIỆN':'UP TO · ELIGIBLE FEES'}</span><strong class="match-score">${partner.back}%</strong><p class="match-reason">${escapeHTML(reason)}</p><button class="btn ${index===0?'btn-primary':'btn-line'}" data-match-partner="${escapeHTML(partner.name)}" data-match-category="${categoryKey}" data-match-account="${account}" type="button">${dict['match.use']} →</button></article>`).join('');
   root.scrollIntoView({behavior:'smooth',block:'nearest'})
 }
 function requestDate(value){const date=new Date(value);return Number.isNaN(date.getTime())?'—':new Intl.DateTimeFormat(state.lang==='vi'?'vi-VN':'en-US',{dateStyle:'short',timeStyle:'short'}).format(date)}
@@ -2216,22 +2350,34 @@ function renderAll(){renderFeatured();renderTape();Object.keys(PAGE_CATEGORY).fo
 
 async function copyCode(btn,code){const original=btn.textContent;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(code)}else{const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}btn.textContent=ui().copied;btn.classList.add('copied');showToast(state.lang==='vi'?`Đã lưu mã ${code}`:`Code ${code} copied`);setTimeout(()=>{btn.textContent=original;btn.classList.remove('copied')},1500)}catch{btn.textContent=code;setTimeout(()=>btn.textContent=original,1800)}}
 
-function readCalcSettings(){const saved=readStoredJSON(CALC_STATE_KEY,{});return{
+const CALC_REFERENCE_FEES={spot:0.1,futures:0.05};
+function calcReferenceFee(product){return CALC_REFERENCE_FEES[product]??0.1}
+function readCalcSettings(){const saved=readStoredJSON(CALC_STATE_KEY,{});const product=['spot','futures'].includes(saved.product)?saved.product:'spot';const ref=calcReferenceFee(product);const feeRate=Number.isFinite(Number(saved.feeRate))?Math.max(0,Math.min(2,Number(saved.feeRate))):ref;const inferredMode=saved.feeMode==='custom'?'custom':(saved.feeMode==='reference'?'reference':(Math.abs(feeRate-ref)<0.000001?'reference':'custom'));return{
   partner:exchanges.some(e=>e.category==='Crypto Exchange'&&e.name===saved.partner)?saved.partner:DEFAULT_PARTNER,
-  product:['spot','futures'].includes(saved.product)?saved.product:'spot',
-  feeRate:Number.isFinite(Number(saved.feeRate))?Math.max(0,Math.min(2,Number(saved.feeRate))):0.1,
+  product,
+  feeRate,
+  feeMode:inferredMode,
   volume:Number.isFinite(Number(saved.volume))?Math.max(1000,Math.min(2000000,Number(saved.volume))):10000
 }}
-function saveCalcSettings(){const exchange=document.getElementById('calcExchange'),product=document.getElementById('calcProduct'),fee=document.getElementById('calcFeeRate'),volume=document.getElementById('calcVolume');if(!exchange||!product||!fee||!volume)return;safeStorageSet(CALC_STATE_KEY,JSON.stringify({partner:exchange.value,product:product.value,feeRate:Number(fee.value)||0,volume:Number(volume.value)||0}))}
+function saveCalcSettings(){const exchange=document.getElementById('calcExchange'),product=document.getElementById('calcProduct'),fee=document.getElementById('calcFeeRate'),volume=document.getElementById('calcVolume');if(!exchange||!product||!fee||!volume)return;safeStorageSet(CALC_STATE_KEY,JSON.stringify({partner:exchange.value,product:product.value,feeRate:Number(fee.value)||0,feeMode:fee.dataset.feeMode==='custom'?'custom':'reference',volume:Number(volume.value)||0}))}
+function updateCalcFeeHelper(){
+  const fee=document.getElementById('calcFeeRate'),product=document.getElementById('calcProduct'),partner=document.getElementById('calcExchange'),status=document.getElementById('calcFeeStatus'),help=document.getElementById('calcFeeHelp');if(!fee||!product||!status||!help)return;
+  const isCustom=fee.dataset.feeMode==='custom';const value=Math.max(0,Number(fee.value)||0);const partnerName=partner?.value||DEFAULT_PARTNER;const pct=value.toFixed(3).replace(/0+$/,'').replace(/\.$/,'');
+  status.textContent=state.lang==='vi'?(isCustom?'BẠN ĐÃ SỬA':'MỨC THAM CHIẾU'):(isCustom?'CUSTOM':'REFERENCE');
+  status.dataset.mode=isCustom?'custom':'reference';
+  help.textContent=state.lang==='vi'
+    ?(isCustom?`Đang dùng ${pct}% do bạn nhập. Hãy đối chiếu Maker/Taker, VIP và phí thực tế trong tài khoản ${partnerName}.`:`${pct}% chỉ là mức tham chiếu để ước tính ${product.value==='spot'?'Spot':'Futures'}, không phải phí cố định của ${partnerName}. Maker/Taker và VIP có thể khác.`)
+    :(isCustom?`Using the ${pct}% fee you entered. Check maker/taker, VIP tier and your actual ${partnerName} account fee.`:`${pct}% is only a reference for estimating ${product.value==='spot'?'Spot':'Futures'} — not a fixed ${partnerName} fee. Maker/taker and VIP rates may differ.`);
+}
 function renderCalcOptions(){
   const select=document.getElementById('calcExchange');if(!select)return;
   const saved=readCalcSettings();const previous=select.value||saved.partner||DEFAULT_PARTNER;
   const list=exchanges.filter(e=>e.category==='Crypto Exchange').sort(partnerPriority);
-  select.innerHTML=list.map(e=>`<option value="${e.name}">${e.name} (${e.back}%)</option>`).join('');
+  select.innerHTML=list.map(e=>`<option value="${e.name}">${e.name} (${state.lang==='vi'?'tối đa':'up to'} ${e.back}%)</option>`).join('');
   select.value=list.some(e=>e.name===previous)?previous:DEFAULT_PARTNER;
   if(!select.dataset.hydrated){
     const product=document.getElementById('calcProduct'),fee=document.getElementById('calcFeeRate'),volume=document.getElementById('calcVolume');
-    if(product)product.value=saved.product;if(fee)fee.value=String(saved.feeRate);if(volume)volume.value=String(saved.volume);
+    if(product)product.value=saved.product;if(fee){fee.value=String(saved.feeRate);fee.dataset.feeMode=saved.feeMode}if(volume)volume.value=String(saved.volume);
     select.dataset.hydrated='1'
   }
 }
@@ -2241,13 +2387,13 @@ function calcCenterUI(){return state.lang==='vi'?{
   saved:'Tự lưu trên thiết bị',monthly:'Ước tính / tháng',yearly:'Ước tính / năm',tracking:'UID đang xử lý',latest:'Trạng thái gần nhất',
   recent:'Yêu cầu gần đây',all:'Xem tất cả →',empty:'Chưa có UID nào được gửi trên thiết bị này.',gate:'Ưu tiên mặc định',gateCopy:'Gate được đặt làm lựa chọn mặc định. Bạn vẫn có thể đổi sang sàn khác trong máy tính phía trên.',
   gateUid:'Kiểm tra UID Gate',track:'Tra cứu yêu cầu',none:'Chưa có yêu cầu',requests:'yêu cầu đã lưu',
-  note:'Số tiền hoàn là ước tính theo thông số bạn nhập và mức công bố; không phải số tiền đã được đối tác xác nhận.'
+  note:'Đây là ước tính, không phải cam kết. Mức % hiển thị là mức tối đa trên phần phí đủ điều kiện; số thực nhận phụ thuộc phí thực tế và điều kiện của đối tác.'
 }:{
   eyebrow:'REBATE CENTER',title:'My rebate center',sub:'Uses the volume and fee rate from the calculator above. BIGBROVN saves your selections and UID history on this device so you can return and track progress.',
   saved:'Saved on this device',monthly:'Estimate / month',yearly:'Estimate / year',tracking:'UIDs in progress',latest:'Latest status',
   recent:'Recent requests',all:'View all →',empty:'No UID has been submitted on this device yet.',gate:'Default priority',gateCopy:'Gate is the default choice. You can still switch to another exchange in the calculator above.',
   gateUid:'Check Gate UID',track:'Track requests',none:'No request yet',requests:'saved requests',
-  note:'Rebate amounts are estimates based on your inputs and displayed rates, not amounts confirmed by a partner.'
+  note:'This is an estimate, not a guarantee. The displayed percentage is a maximum on eligible fees; the amount actually received depends on actual fees and partner eligibility.'
 }}
 function renderCalcRebateCenter(calcData){
   const root=document.getElementById('calcRebateCenter');if(!root)return;
@@ -2258,7 +2404,7 @@ function renderCalcRebateCenter(calcData){
   root.innerHTML=`<section class="calc-rebate-center" aria-labelledby="calcCenterTitle">
     <header class="calc-center-head"><div><span class="eyebrow">${L.eyebrow}</span><h2 id="calcCenterTitle">${L.title}</h2><p>${L.sub}</p></div><span class="calc-center-save">${L.saved}</span></header>
     <div class="calc-center-summary">
-      <div class="calc-center-metric primary"><small>${L.monthly}</small><strong>${money(calcData.rebate)}</strong><em>${escapeHTML(calcData.ex.name)} · ${calcData.ex.back}%</em></div>
+      <div class="calc-center-metric primary"><small>${L.monthly}</small><strong>${money(calcData.rebate)}</strong><em>${escapeHTML(calcData.ex.name)} · ${state.lang==='vi'?'tối đa':'up to'} ${calcData.ex.back}%</em></div>
       <div class="calc-center-metric"><small>${L.yearly}</small><strong>${money(calcData.rebate*12)}</strong><em>${money(calcData.volume)} ${state.lang==='vi'?'volume/tháng':'monthly volume'}</em></div>
       <div class="calc-center-metric"><small>${L.tracking}</small><strong>${active}</strong><em>${history.length} ${L.requests}</em></div>
       <div class="calc-center-metric status"><small>${L.latest}</small><strong>${latestMeta?`${latestMeta.icon} ${escapeHTML(latestMeta.label)}`:L.none}</strong><em>${latest?`${escapeHTML(latest.partner)} · ${escapeHTML(latest.requestId)}`:'—'}</em></div>
@@ -2266,7 +2412,7 @@ function renderCalcRebateCenter(calcData){
     <div class="calc-center-body">
       <div class="calc-center-history"><div class="calc-center-block-head"><h3>${L.recent}</h3><a href="#requests">${L.all}</a></div><div class="calc-center-list">${list}</div></div>
       <aside class="calc-center-actions">
-        <div class="calc-center-gate"><div class="calc-center-gate-id"><span class="calc-center-logo">${logoTag(gate)}</span><span><small>${L.gate}</small><b>Gate.io</b></span></div><strong>${gate.back}%</strong></div>
+        <div class="calc-center-gate"><div class="calc-center-gate-id"><span class="calc-center-logo">${logoTag(gate)}</span><span><small>${L.gate}</small><b>Gate.io</b></span></div><strong>${state.lang==='vi'?'Tối đa ':'Up to '}${gate.back}%</strong></div>
         <p class="calc-center-action-copy">${L.gateCopy}</p>
         <button class="btn btn-primary" data-center-gate-uid type="button">${L.gateUid}</button>
         <a class="btn btn-line" href="#requests">${L.track}</a>
@@ -2281,8 +2427,11 @@ function updateCalc(){
   const name=exchange.value||DEFAULT_PARTNER;const product=productEl.value;const feeRate=Math.max(0,Number(feeEl.value)||0);const volume=Number(range.value)||0;
   const ex=exchanges.find(e=>e.name===name)||exchanges.find(e=>e.name===DEFAULT_PARTNER)||exchanges[0];const fee=volume*(feeRate/100);const rebate=fee*(ex.back/100);
   const progress=Math.max(0,Math.min(100,(volume-Number(range.min))/(Number(range.max)-Number(range.min))*100));range.style.setProperty('--range-progress',`${progress}%`);
-  document.getElementById('calcVolumeLabel').textContent='$'+volume.toLocaleString('en-US');document.getElementById('calcResult').textContent=money(rebate);document.getElementById('calcYear').textContent=money(rebate*12)+(state.lang==='vi'?' / năm':' / year');document.getElementById('calcPartnerOut').textContent=ex.name;document.getElementById('calcProductOut').textContent=I18N[state.lang][product==='spot'?'calc.spot':'calc.futures'];document.getElementById('calcRateOut').textContent=feeRate.toFixed(3).replace(/0+$/,'').replace(/\.$/,'')+'%';document.getElementById('calcFeeOut').textContent=money(fee);document.getElementById('calcBackOut').textContent=ex.back+'%';
-  saveCalcSettings();renderCalcRebateCenter({ex,product,feeRate,volume,fee,rebate})
+  document.getElementById('calcVolumeLabel').textContent='$'+volume.toLocaleString('en-US');document.getElementById('calcResult').textContent=money(rebate);document.getElementById('calcYear').textContent=money(rebate*12)+(state.lang==='vi'?' / năm':' / year');document.getElementById('calcPartnerOut').textContent=ex.name;document.getElementById('calcProductOut').textContent=I18N[state.lang][product==='spot'?'calc.spot':'calc.futures'];document.getElementById('calcRateOut').textContent=feeRate.toFixed(3).replace(/0+$/,'').replace(/\.$/,'')+'%';document.getElementById('calcFeeOut').textContent=money(fee);document.getElementById('calcBackOut').textContent=(state.lang==='vi'?'Tối đa ':'Up to ')+ex.back+'%';
+  const disclosureTitle=document.getElementById('calcDisclosureTitle'),disclosureText=document.getElementById('calcDisclosureText');
+  if(disclosureTitle)disclosureTitle.textContent=state.lang==='vi'?`${ex.back}% không phải ${ex.back}% giá trị giao dịch`:`${ex.back}% does not mean ${ex.back}% of trading volume`;
+  if(disclosureText)disclosureText.textContent=state.lang==='vi'?`Mức ${ex.back}% của ${ex.name} là mức tối đa công bố trên phần phí đủ điều kiện theo chương trình. Số thực nhận có thể khác theo Maker/Taker, VIP, sản phẩm và chính sách áp dụng.`:`The ${ex.back}% shown for ${ex.name} is the displayed maximum on eligible fees under the program. The amount actually received can vary by maker/taker fees, VIP tier, product and applicable terms.`;
+  updateCalcFeeHelper();saveCalcSettings();renderCalcRebateCenter({ex,product,feeRate,volume,fee,rebate})
 }
 
 function applyI18N(lang){state.lang=lang;document.documentElement.lang=lang;const dict=I18N[lang];document.querySelectorAll('[data-i18n]').forEach(el=>{const value=dict[el.dataset.i18n];if(value===undefined)return;if(value.includes('<'))el.innerHTML=value;else el.textContent=value});document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{const value=dict[el.dataset.i18nPlaceholder];if(value!==undefined)el.placeholder=value});document.getElementById('langBtn').textContent=lang==='vi'?'EN':'VI';safeStorageSet('bb-lang',lang);renderAll();updateTitle(currentRoute());updateUidSummary();setUidConnection(state.uidConnection)}
@@ -2330,8 +2479,9 @@ function bind(){
   document.addEventListener('submit',event=>{if(event.target.id==='uidForm')submitUidForm(event)});
   document.addEventListener('input',event=>{if(event.target.closest('#uidForm'))saveUidDraft()});
   document.addEventListener('change',event=>{if(event.target.matches('[data-guide-category-select]')){const selected=GUIDE_CATEGORIES.find(item=>item.key===event.target.value);if(!selected)return;state.guideCategory=selected.key;const current=exchanges.find(e=>e.name===state.guidePartner);if(current?.category!==selected.category)state.guidePartner=exchanges.filter(e=>e.category===selected.category).sort(partnerPriority)[0]?.name||state.guidePartner;safeStorageSet('bb-guide-category',state.guideCategory);safeStorageSet('bb-guide-partner',state.guidePartner);syncUidFromGuide();setGuideStage(1,false);return}if(event.target.matches('[data-guide-partner-select]')&&exchanges.some(e=>e.name===event.target.value)){state.guidePartner=event.target.value;state.guideCategory=guideCategoryFromPartner(state.guidePartner);safeStorageSet('bb-guide-partner',state.guidePartner);safeStorageSet('bb-guide-category',state.guideCategory);syncUidFromGuide();setGuideStage(1,false);return}if(event.target.closest('#uidForm'))saveUidDraft()});resetUidTimer();
-  document.getElementById('calcExchange').addEventListener('change',updateCalc);document.getElementById('calcVolume').addEventListener('input',updateCalc);document.getElementById('calcFeeRate').addEventListener('input',updateCalc);
-  document.getElementById('calcProduct').addEventListener('change',event=>{document.getElementById('calcFeeRate').value=event.target.value==='spot'?'0.1':'0.05';updateCalc()});
+  document.getElementById('calcExchange').addEventListener('change',updateCalc);document.getElementById('calcVolume').addEventListener('input',updateCalc);document.getElementById('calcFeeRate').addEventListener('input',event=>{event.target.dataset.feeMode='custom';updateCalc()});
+  document.getElementById('calcProduct').addEventListener('change',event=>{const fee=document.getElementById('calcFeeRate');fee.value=String(calcReferenceFee(event.target.value));fee.dataset.feeMode='reference';updateCalc()});
+  document.getElementById('calcFeeAuto').addEventListener('click',()=>{const product=document.getElementById('calcProduct'),fee=document.getElementById('calcFeeRate');fee.value=String(calcReferenceFee(product.value));fee.dataset.feeMode='reference';updateCalc();fee.focus()});
   document.getElementById('langBtn').addEventListener('click',()=>applyI18N(state.lang==='vi'?'en':'vi'));document.getElementById('themeBtn').addEventListener('click',()=>applyTheme(state.theme==='dark'?'light':'dark'));
   document.addEventListener('keydown',event=>{if(event.key==='Escape')closeMenu()});
 }
