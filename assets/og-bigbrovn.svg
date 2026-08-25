@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="78%" cy="30%" r="58%">
+      <stop offset="0" stop-color="#34d399" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#0a0e15" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="line" x1="0" x2="1">
+      <stop stop-color="#f2b544"/>
+      <stop offset="1" stop-color="#34d399"/>
+    </linearGradient>
+    <pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse">
+      <path d="M48 0H0V48" fill="none" stroke="#ffffff" stroke-opacity=".045"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="#0a0e15"/>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <path d="M0 5h1200" stroke="url(#line)" stroke-width="10"/>
+  <g transform="translate(84 78)">
+    <path d="M0 0h82a13 13 0 0 1 13 13v72l-11 11-11-11-11 11-11-11-13 13-13-13-10 11-8-8V13A13 13 0 0 1 20 0Z" fill="#f2b544"/>
+    <text x="48" y="58" fill="#17120a" font-family="Arial, sans-serif" font-size="43" font-weight="800" text-anchor="middle">BB</text>
+    <path d="M27 70h38m0 0-8-8m8 8-8 8" fill="none" stroke="#075c35" stroke-linecap="round" stroke-linejoin="round" stroke-width="5"/>
+    <text x="122" y="48" fill="#f4f6f8" font-family="Arial, sans-serif" font-size="45" font-weight="800">BIGBRO<tspan fill="#34d399">VN</tspan></text>
+    <text x="124" y="78" fill="#8a93a5" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="4">FEE REBATE NETWORK</text>
+  </g>
+  <g transform="translate(84 270)">
+    <text fill="#f4f6f8" font-family="Arial, sans-serif" font-size="70" font-weight="800">
+      <tspan x="0" y="0">Giao dịch như cũ.</tspan>
+      <tspan x="0" y="88" fill="#34d399">Phí quay về.</tspan>
+    </text>
+    <text x="2" y="148" fill="#a9b3c2" font-family="Arial, sans-serif" font-size="25">Crypto · Forex/CFD · DEX/Perps</text>
+  </g>
+  <g transform="translate(956 390)">
+    <circle r="92" fill="none" stroke="#34d399" stroke-opacity=".38" stroke-width="2"/>
+    <circle r="63" fill="#121926" stroke="#f2b544" stroke-opacity=".48" stroke-width="2"/>
+    <text x="0" y="13" fill="#f2b544" font-family="Arial, sans-serif" font-size="46" font-weight="800" text-anchor="middle">BACK</text>
+  </g>
+</svg>
