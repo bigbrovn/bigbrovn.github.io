@@ -1342,6 +1342,400 @@ html[data-theme="light"] .magic-ambient{opacity:.52}
 .compact-home-grid .match-form{padding:0 28px 22px!important}
 .compact-home-grid .match-results{padding:0 28px 22px!important}
 
+
+/* === VISUAL BOOST v22 ===
+   - Make registration CTAs more prominent
+   - Make light mode more colorful and lively, while keeping the same layout */
+
+/* 1) Registration / primary CTA emphasis */
+.ticket-cta,
+.btn-primary,
+.top-card-actions .btn.btn-primary,
+.match-card .btn.btn-primary,
+.calc-center-actions .btn.btn-primary,
+.compact-home-grid .match-form>.btn,
+.assistant-next,
+.guide-primary{
+  font-weight:800!important;
+  letter-spacing:.015em!important;
+  border:1px solid rgba(var(--gold-rgb),.34)!important;
+  background:
+    linear-gradient(180deg,#f4cd67 0%,#e6b94a 100%)!important;
+  color:#19150c!important;
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.15),
+    inset 0 1px 0 rgba(255,255,255,.34)!important;
+}
+.ticket-cta:hover,
+.btn-primary:hover,
+.top-card-actions .btn.btn-primary:hover,
+.match-card .btn.btn-primary:hover,
+.calc-center-actions .btn.btn-primary:hover,
+.compact-home-grid .match-form>.btn:hover,
+.assistant-next:hover,
+.guide-primary:hover{
+  background:
+    linear-gradient(180deg,#f7d476 0%,#ebc255 100%)!important;
+  border-color:rgba(var(--gold-rgb),.42)!important;
+  box-shadow:
+    0 12px 26px rgba(0,0,0,.18),
+    0 0 0 1px rgba(var(--gold-rgb),.09),
+    inset 0 1px 0 rgba(255,255,255,.36)!important;
+  transform:translateY(-1px);
+}
+.ticket-cta:focus-visible,
+.btn-primary:focus-visible,
+.guide-primary:focus-visible{
+  outline:none;
+  box-shadow:
+    0 0 0 3px rgba(var(--gold-rgb),.18),
+    0 12px 26px rgba(0,0,0,.18)!important;
+}
+
+/* make the "Đăng ký" area feel more obviously actionable */
+.ticket-actions .ticket-cta{
+  position:relative;
+  overflow:hidden;
+}
+.ticket-actions .ticket-cta::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(100deg,transparent 20%,rgba(255,255,255,.16) 50%,transparent 80%);
+  opacity:.55;
+}
+
+/* secondary utility buttons remain calmer */
+.ticket-copy,
+.btn-line,
+.top-code{
+  font-weight:740!important;
+}
+
+/* 2) Light mode: more colorful overall, not flat */
+html[data-theme="light"]{
+  --ink:#f4f6f7;
+  --ink-2:#ffffff;
+  --ink-3:#eef2f3;
+  --line:rgba(21,28,35,.09);
+
+  --cash:#138567;--cash-rgb:19,133,103;
+  --signal:#4968c4;--signal-rgb:73,104,196;
+  --volt:#7f5ccc;--volt-rgb:127,92,204;
+  --alert:#c76652;--alert-rgb:199,102,82;
+  --gold:#ba8c2d;--gold-rgb:186,140,45;
+
+  --paper:#ffffff;
+  --paper-2:#f5f7f8;
+  --paper-ink:#101417;
+  --paper-muted:#66707a;
+  --paper-line:rgba(21,28,35,.10);
+
+  --shadow-card:0 6px 18px rgba(25,35,45,.06);
+  --shadow-ticket:0 8px 22px rgba(25,35,45,.07);
+  --shadow-ticket-hover:0 12px 26px rgba(25,35,45,.10);
+}
+
+html[data-theme="light"] body{
+  background:
+    radial-gradient(circle at top left, rgba(var(--cash-rgb),.08), transparent 35%),
+    radial-gradient(circle at top right, rgba(var(--gold-rgb),.07), transparent 32%),
+    linear-gradient(180deg,#f7f9fb 0%, #f2f4f6 100%)!important;
+  color:var(--text)!important;
+}
+
+/* higher color presence on key panels in light mode */
+html[data-theme="light"] .page-hero,
+html[data-theme="light"] .hero{
+  background:
+    linear-gradient(135deg, rgba(var(--cash-rgb),.08), rgba(var(--signal-rgb),.03) 38%, rgba(var(--gold-rgb),.06))!important;
+}
+
+html[data-theme="light"] .smart-match,
+html[data-theme="light"] .compact-stats-panel,
+html[data-theme="light"] .calc-rebate-center,
+html[data-theme="light"] .calc-panel,
+html[data-theme="light"] .guide-main,
+html[data-theme="light"] .guide-sidebar,
+html[data-theme="light"] .request-panel,
+html[data-theme="light"] .top-card,
+html[data-theme="light"] .contact-card{
+  background:
+    linear-gradient(145deg, rgba(var(--cash-rgb),.035), #ffffff 48%, rgba(var(--gold-rgb),.045))!important;
+  box-shadow:0 10px 26px rgba(25,35,45,.06)!important;
+  border-color:rgba(21,28,35,.08)!important;
+}
+
+html[data-theme="light"] .ticket{
+  background:
+    linear-gradient(180deg,#ffffff 0%, #fbfcfd 100%)!important;
+  box-shadow:0 8px 22px rgba(25,35,45,.06)!important;
+  border-color:rgba(21,28,35,.09)!important;
+}
+html[data-theme="light"] .ticket:hover{
+  box-shadow:0 12px 28px rgba(25,35,45,.10)!important;
+}
+
+/* category cards keep identity by color */
+html[data-theme="light"] .category-card:nth-child(1){
+  background:linear-gradient(145deg,rgba(var(--cash-rgb),.10),#ffffff 60%)!important;
+  border-color:rgba(var(--cash-rgb),.22)!important;
+}
+html[data-theme="light"] .category-card:nth-child(2){
+  background:linear-gradient(145deg,rgba(var(--signal-rgb),.10),#ffffff 60%)!important;
+  border-color:rgba(var(--signal-rgb),.18)!important;
+}
+html[data-theme="light"] .category-card:nth-child(3){
+  background:linear-gradient(145deg,rgba(var(--volt-rgb),.10),#ffffff 60%)!important;
+  border-color:rgba(var(--volt-rgb),.18)!important;
+}
+html[data-theme="light"] .category-card:nth-child(4){
+  background:linear-gradient(145deg,rgba(var(--alert-rgb),.09),#ffffff 60%)!important;
+  border-color:rgba(var(--alert-rgb),.18)!important;
+}
+
+/* top cards and percentage emphasis */
+html[data-theme="light"] .top-card:first-child{
+  background:linear-gradient(145deg,rgba(var(--gold-rgb),.13),#ffffff 58%)!important;
+}
+html[data-theme="light"] .top-rate strong,
+html[data-theme="light"] .ticket-rate b{
+  filter:saturate(1.05);
+}
+
+/* Light mode buttons: primary more vivid, utility clearer */
+html[data-theme="light"] .ticket-cta,
+html[data-theme="light"] .btn-primary,
+html[data-theme="light"] .top-card-actions .btn.btn-primary,
+html[data-theme="light"] .match-card .btn.btn-primary,
+html[data-theme="light"] .calc-center-actions .btn.btn-primary,
+html[data-theme="light"] .compact-home-grid .match-form>.btn,
+html[data-theme="light"] .assistant-next,
+html[data-theme="light"] .guide-primary{
+  background:linear-gradient(180deg,#f2cf73 0%,#e8bf57 100%)!important;
+  border-color:rgba(var(--gold-rgb),.28)!important;
+  color:#3a2b08!important;
+  box-shadow:
+    0 8px 18px rgba(25,35,45,.09),
+    inset 0 1px 0 rgba(255,255,255,.55)!important;
+}
+html[data-theme="light"] .ticket-cta:hover,
+html[data-theme="light"] .btn-primary:hover{
+  background:linear-gradient(180deg,#f5d883 0%,#edc764 100%)!important;
+}
+
+html[data-theme="light"] .ticket-copy,
+html[data-theme="light"] .btn-line,
+html[data-theme="light"] .top-code{
+  background:linear-gradient(180deg,#eef8f4 0%,#e8f4ef 100%)!important;
+  border-color:rgba(var(--cash-rgb),.16)!important;
+  color:#3f5e56!important;
+}
+
+/* make light mode less dull but not neon */
+html[data-theme="light"] .eyebrow{
+  background:rgba(var(--gold-rgb),.08)!important;
+  border-color:rgba(var(--gold-rgb),.16)!important;
+  color:#9c7424!important;
+}
+html[data-theme="light"] .magic-ambient{
+  opacity:.18!important;
+}
+
+
+/* === COLOR BALANCE v23 ===
+   70% neutral / 20% green & category colors / 10% gold.
+   Gold is reserved for registration and premium ranking moments. */
+
+/* Neutral secondary controls */
+.ticket-copy,
+.btn-line,
+.top-code,
+.assistant-prev,
+.guide-copy,
+.guide-small-btn{
+  background:rgba(255,255,255,.025)!important;
+  border-color:var(--line)!important;
+  color:var(--muted)!important;
+  box-shadow:none!important
+}
+.ticket-copy:hover,
+.btn-line:hover,
+.top-code:hover,
+.assistant-prev:hover,
+.guide-copy:hover,
+.guide-small-btn:hover{
+  background:rgba(255,255,255,.045)!important;
+  border-color:rgba(255,255,255,.16)!important;
+  color:var(--text)!important
+}
+
+/* Green is the default operational action color */
+.compact-home-grid .match-form>.btn,
+.calc-center-actions .btn.btn-primary,
+.assistant-next,
+.guide-primary{
+  background:linear-gradient(180deg,#29b98a,#1e9f76)!important;
+  border-color:rgba(var(--cash-rgb),.30)!important;
+  color:#06130e!important;
+  box-shadow:0 7px 16px rgba(0,0,0,.13)!important
+}
+.compact-home-grid .match-form>.btn:hover,
+.calc-center-actions .btn.btn-primary:hover,
+.assistant-next:hover,
+.guide-primary:hover{
+  background:linear-gradient(180deg,#31c392,#24a77e)!important;
+  border-color:rgba(var(--cash-rgb),.40)!important;
+  box-shadow:0 9px 20px rgba(0,0,0,.16)!important
+}
+
+/* Gold is reserved for REGISTER / JOIN and premium ranking actions */
+.ticket-cta,
+.top-card-actions .btn.btn-primary,
+.match-card .btn.btn-primary{
+  background:linear-gradient(180deg,#efc85f,#ddb04a)!important;
+  border-color:rgba(var(--gold-rgb),.30)!important;
+  color:#19150c!important;
+  box-shadow:0 8px 18px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.30)!important
+}
+.ticket-cta:hover,
+.top-card-actions .btn.btn-primary:hover,
+.match-card .btn.btn-primary:hover{
+  background:linear-gradient(180deg,#f4cf6b,#e3b754)!important;
+  border-color:rgba(var(--gold-rgb),.40)!important;
+  box-shadow:0 10px 22px rgba(0,0,0,.16)!important
+}
+
+/* Prevent generic .btn-primary from turning every primary action gold */
+.btn-primary{
+  background:linear-gradient(180deg,#29b98a,#1e9f76)!important;
+  border-color:rgba(var(--cash-rgb),.30)!important;
+  color:#06130e!important;
+  box-shadow:0 7px 16px rgba(0,0,0,.13)!important
+}
+.btn-primary:hover{
+  background:linear-gradient(180deg,#31c392,#24a77e)!important;
+}
+
+/* Re-assert the gold exceptions after the generic rule */
+.ticket-cta,
+.top-card-actions .btn.btn-primary,
+.match-card .btn.btn-primary{
+  background:linear-gradient(180deg,#efc85f,#ddb04a)!important;
+  color:#19150c!important
+}
+
+/* Light theme: keep surfaces neutral; use color only as accents */
+html[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 12% 0%,rgba(var(--cash-rgb),.045),transparent 30%),
+    radial-gradient(circle at 88% 0%,rgba(var(--signal-rgb),.03),transparent 28%),
+    #f6f7f8!important
+}
+html[data-theme="light"] .page-hero,
+html[data-theme="light"] .hero{
+  background:linear-gradient(135deg,rgba(var(--cash-rgb),.045),rgba(255,255,255,.96) 48%,rgba(var(--signal-rgb),.025))!important
+}
+html[data-theme="light"] .smart-match,
+html[data-theme="light"] .compact-stats-panel,
+html[data-theme="light"] .calc-rebate-center,
+html[data-theme="light"] .calc-panel,
+html[data-theme="light"] .guide-main,
+html[data-theme="light"] .guide-sidebar,
+html[data-theme="light"] .request-panel,
+html[data-theme="light"] .contact-card{
+  background:#ffffff!important;
+  border-color:rgba(21,28,35,.09)!important;
+  box-shadow:0 8px 22px rgba(25,35,45,.055)!important
+}
+html[data-theme="light"] .ticket,
+html[data-theme="light"] .top-card{
+  background:#ffffff!important;
+  border-color:rgba(21,28,35,.09)!important;
+  box-shadow:0 7px 18px rgba(25,35,45,.055)!important
+}
+
+/* Category identity remains, but only as a soft top/side tint */
+html[data-theme="light"] .category-card:nth-child(1){
+  background:linear-gradient(145deg,rgba(var(--cash-rgb),.065),#fff 58%)!important
+}
+html[data-theme="light"] .category-card:nth-child(2){
+  background:linear-gradient(145deg,rgba(var(--signal-rgb),.060),#fff 58%)!important
+}
+html[data-theme="light"] .category-card:nth-child(3){
+  background:linear-gradient(145deg,rgba(var(--volt-rgb),.060),#fff 58%)!important
+}
+html[data-theme="light"] .category-card:nth-child(4){
+  background:linear-gradient(145deg,rgba(var(--alert-rgb),.055),#fff 58%)!important
+}
+
+/* Light theme operational actions = green */
+html[data-theme="light"] .btn-primary,
+html[data-theme="light"] .compact-home-grid .match-form>.btn,
+html[data-theme="light"] .calc-center-actions .btn.btn-primary,
+html[data-theme="light"] .assistant-next,
+html[data-theme="light"] .guide-primary{
+  background:linear-gradient(180deg,#56c8a3,#3bb48e)!important;
+  border-color:rgba(var(--cash-rgb),.20)!important;
+  color:#0b382b!important;
+  box-shadow:0 6px 14px rgba(25,35,45,.07)!important
+}
+
+/* Light theme REGISTER / JOIN = warm gold */
+html[data-theme="light"] .ticket-cta,
+html[data-theme="light"] .top-card-actions .btn.btn-primary,
+html[data-theme="light"] .match-card .btn.btn-primary{
+  background:linear-gradient(180deg,#ebcf7c,#dfbd62)!important;
+  border-color:rgba(var(--gold-rgb),.22)!important;
+  color:#3b2c08!important;
+  box-shadow:0 6px 14px rgba(25,35,45,.07)!important
+}
+
+/* Secondary buttons on light stay neutral, not green blocks */
+html[data-theme="light"] .ticket-copy,
+html[data-theme="light"] .btn-line,
+html[data-theme="light"] .top-code,
+html[data-theme="light"] .assistant-prev,
+html[data-theme="light"] .guide-copy,
+html[data-theme="light"] .guide-small-btn{
+  background:#f7f8f8!important;
+  border-color:rgba(21,28,35,.10)!important;
+  color:#626970!important
+}
+html[data-theme="light"] .ticket-copy:hover,
+html[data-theme="light"] .btn-line:hover,
+html[data-theme="light"] .top-code:hover{
+  background:#f1f3f3!important;
+  color:#31373d!important
+}
+
+/* Reduce gold presence in generic decorative UI */
+html[data-theme="light"] .eyebrow{
+  background:rgba(var(--cash-rgb),.055)!important;
+  border-color:rgba(var(--cash-rgb),.14)!important;
+  color:var(--cash)!important
+}
+.top-tab:hover,.top-tab.active{
+  background:rgba(var(--gold-rgb),.14)!important;
+  border-color:rgba(var(--gold-rgb),.34)!important;
+  color:var(--gold)!important
+}
+html[data-theme="light"] .top-tab:hover,
+html[data-theme="light"] .top-tab.active{
+  background:rgba(var(--gold-rgb),.10)!important;
+  border-color:rgba(var(--gold-rgb),.25)!important;
+  color:#7d5b16!important
+}
+
+/* Keep #1 special but calm */
+.top-card:first-child{
+  background:linear-gradient(145deg,rgba(var(--gold-rgb),.075),var(--ink-2) 58%)!important
+}
+html[data-theme="light"] .top-card:first-child{
+  background:linear-gradient(145deg,rgba(var(--gold-rgb),.07),#fff 58%)!important
+}
+
 </style>
 </head>
 <body>
