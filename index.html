@@ -745,7 +745,7 @@ html[data-theme="light"] .top-code{background:#fff}
 .uid-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
 .uid-form input,.uid-form select,.uid-form textarea{width:100%;min-height:50px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--ink);color:var(--text);font-size:15px;outline:0;transition:border-color .2s,box-shadow .2s}.uid-form textarea{min-height:108px;resize:vertical;line-height:1.55}.uid-form input:focus,.uid-form select:focus,.uid-form textarea:focus{border-color:var(--cash);box-shadow:0 0 0 3px rgba(var(--cash-rgb),.11)}
 .uid-submit-row{display:flex;align-items:center;justify-content:space-between;gap:22px;margin-top:18px}.uid-submit-row p{max-width:460px;color:var(--muted);font-size:12px;line-height:1.55}.uid-submit-row .btn{flex:0 0 auto;min-height:50px}.uid-submit-row .btn[disabled]{cursor:wait;opacity:.65}
-.uid-status{display:none;margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font-size:14px;line-height:1.5}.uid-status.show{display:block}.uid-status.success{border-color:rgba(var(--cash-rgb),.4);background:rgba(var(--cash-rgb),.08);color:var(--cash)}.uid-status.error{border-color:rgba(var(--alert-rgb),.4);background:rgba(var(--alert-rgb),.08);color:var(--alert)}
+.uid-status{display:none;margin-top:15px;padding:12px 14px;border:1px solid var(--line);border-radius:9px;font-size:14px;line-height:1.5}.uid-status.show{display:block}.uid-status.pending{border-color:rgba(var(--gold-rgb),.4);background:rgba(var(--gold-rgb),.08);color:var(--gold)}.uid-status.success{border-color:rgba(var(--cash-rgb),.4);background:rgba(var(--cash-rgb),.08);color:var(--cash)}.uid-status.error{border-color:rgba(var(--alert-rgb),.4);background:rgba(var(--alert-rgb),.08);color:var(--alert)}
 .uid-last{margin-top:12px;padding:12px 14px;border:1px solid rgba(var(--cash-rgb),.28);border-radius:9px;background:rgba(var(--cash-rgb),.055);color:var(--muted);font-size:12px;line-height:1.55}.uid-last b{color:var(--cash);font-family:var(--font-code);font-size:13px}.uid-last time{color:var(--text)}
 .uid-trap{position:absolute!important;left:-10000px!important;width:1px!important;height:1px!important;overflow:hidden!important}
 html[data-theme="light"] .uid-intro{background:linear-gradient(145deg,rgba(var(--cash-rgb),.11),#f7faf8 56%)}html[data-theme="light"] .uid-form{background:#fff}html[data-theme="light"] .uid-form input,html[data-theme="light"] .uid-form select,html[data-theme="light"] .uid-form textarea{background:#f5f7fa}
@@ -827,6 +827,54 @@ html[data-theme="light"] #calcVolume{background:linear-gradient(90deg,var(--gold
 
 .page[data-page="calculator"] .page-hero h1{max-width:1100px;font-size:clamp(40px,4.1vw,62px);text-wrap:balance}
 @media(max-width:560px){.page[data-page="calculator"] .page-hero h1{font-size:clamp(36px,11vw,48px);text-wrap:pretty}}
+
+/* Vietnamese typography audit — readable UI text, monospace only for codes/data */
+html[lang="vi"] body{font-feature-settings:"kern" 1,"liga" 1;line-height:1.5}
+html[lang="vi"] .eyebrow,
+html[lang="vi"] .rebate-strip-label,
+html[lang="vi"] .field label,
+html[lang="vi"] .guide-kicker,
+html[lang="vi"] .assistant-stage-no,
+html[lang="vi"] .ticket-cat,
+html[lang="vi"] .ticket-rate span,
+html[lang="vi"] .top-category,
+html[lang="vi"] .top-count{font-family:var(--font-ui);letter-spacing:.055em}
+html[lang="vi"] .nav-links{font-size:15px}
+html[lang="vi"] .page-hero p,
+html[lang="vi"] .hero-sub{font-size:17px;line-height:1.72}
+html[lang="vi"] .ticket-cat,
+html[lang="vi"] .ticket-code,
+html[lang="vi"] .ticket-rate span{font-size:11px}
+html[lang="vi"] .ticket-code b{font-size:14px;line-height:1.45}
+html[lang="vi"] .ticket-cta{font-size:13px}
+html[lang="vi"] .assistant-head h2,
+html[lang="vi"] .assistant-stage h3,
+html[lang="vi"] .page-hero h1{text-wrap:balance}
+html[lang="vi"] .assistant-stage-no,
+html[lang="vi"] .assistant-field-label,
+html[lang="vi"] .assistant-summary h4{font-size:13px}
+html[lang="vi"] .assistant-stage-head p{font-size:15px;line-height:1.65}
+html[lang="vi"] .assistant-step b{font-size:14px}
+html[lang="vi"] .assistant-option p,
+html[lang="vi"] .assistant-ref-note{font-size:14px;line-height:1.6}
+html[lang="vi"] .assistant-summary-row span{font-size:13px}
+html[lang="vi"] .assistant-summary-row b{font-size:14px;line-height:1.45}
+html[lang="vi"] .assistant-security{font-size:12px;line-height:1.65}
+html[lang="vi"] .uid-form label>span{font-size:13px;line-height:1.45}
+html[lang="vi"] .uid-submit-row p{font-size:13px;line-height:1.65}
+html[lang="vi"] .uid-status{font-size:14px;line-height:1.55}
+@media(max-width:700px){
+  html[lang="vi"] .page-hero h1{font-size:clamp(34px,10vw,48px);line-height:1.08;text-wrap:pretty}
+  html[lang="vi"] .page-hero p{font-size:16px;line-height:1.65}
+  html[lang="vi"] .assistant-stage h3{font-size:clamp(27px,8vw,34px);text-wrap:pretty}
+  html[lang="vi"] .assistant-select{font-size:16px}
+}
+@media(max-width:440px){
+  html[lang="vi"] .assistant-head h2{font-size:28px;line-height:1.15;text-wrap:pretty}
+  html[lang="vi"] .assistant-stage{padding:24px 16px}
+  html[lang="vi"] .assistant-summary{padding:20px 16px}
+  html[lang="vi"] .assistant-partner-preview{gap:12px;padding:16px}
+}
 
 </style>
 </head>
@@ -1161,7 +1209,52 @@ function updateUidSummary(){const context=document.getElementById('uidSmartConte
 function openUidPanel(focusUid=true){syncUidFromGuide();setGuideStage(4);if(focusUid)setTimeout(()=>document.getElementById('uidValue')?.focus({preventScroll:true}),90)}
 function markGuideSubmitted(){state.guideStage=4;safeStorageSet(GUIDE_STAGE_KEY,'4');renderGuide()}
 async function checkUidConnection(){const endpoint=uidApiUrl();if(!endpoint){setUidConnection('error');return false}setUidConnection('checking');const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),6000);try{const response=await fetch(endpoint,{method:'GET',signal:controller.signal});const data=await response.json().catch(()=>({}));const ready=response.ok&&data.configured===true;setUidConnection(ready?'ready':'error');return ready}catch{setUidConnection('error');return false}finally{clearTimeout(timer)}}
-async function submitUidForm(event){event.preventDefault();const form=event.currentTarget;if(!form.reportValidity())return;const dict=I18N[state.lang];const endpoint=uidApiUrl();if(!endpoint){setUidConnection('error');setUidStatus(dict['uid.config'],'error');return}const lastSend=Number(safeStorageGet(UID_COOLDOWN_KEY)||0);if(Date.now()-lastSend<15000){setUidStatus(dict['uid.wait'],'error');return}saveUidDraft();const button=document.getElementById('uidSubmit');button.disabled=true;button.textContent=dict['uid.sending'];const payload=Object.fromEntries(new FormData(form).entries());payload.page=location.href;payload.language=state.lang;try{const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload)});const data=await response.json().catch(()=>({}));if(!response.ok||!data.ok){const errorKey=response.status===503?'uid.serverConfig':(response.status===403?'uid.origin':'uid.error');throw new Error(errorKey)}const requestId=data.requestId||'OK';safeStorageSet(UID_COOLDOWN_KEY,String(Date.now()));safeStorageSet(UID_LAST_KEY,JSON.stringify({requestId,partner:payload.partner,sentAt:new Date().toISOString()}));setUidConnection('ready');markGuideSubmitted();setUidStatus(`${dict['uid.success']} · #${requestId}`,'success');document.getElementById('uidValue').value='';document.getElementById('uidNote').value='';saveUidDraft();updateUidSummary();resetUidTimer()}catch(error){setUidConnection('error');setUidStatus(dict[error.message]||dict['uid.error'],'error')}finally{const currentButton=document.getElementById('uidSubmit');if(currentButton){currentButton.disabled=false;currentButton.textContent=dict['uid.submit']}}}
+async function submitUidForm(event){
+  event.preventDefault();
+  /* The submit event is delegated from document, therefore currentTarget is
+     document. event.target is the form that actually emitted the event. */
+  const form=event.target;
+  if(!(form instanceof HTMLFormElement)||form.id!=='uidForm')return;
+  if(!form.reportValidity())return;
+  const dict=I18N[state.lang];
+  const endpoint=uidApiUrl();
+  if(!endpoint){setUidConnection('error');setUidStatus(dict['uid.config'],'error');return}
+  const lastSend=Number(safeStorageGet(UID_COOLDOWN_KEY)||0);
+  if(Date.now()-lastSend<15000){setUidStatus(dict['uid.wait'],'error');return}
+  saveUidDraft();
+  const button=form.querySelector('#uidSubmit');
+  if(button){button.disabled=true;button.setAttribute('aria-busy','true');button.textContent=dict['uid.sending']}
+  setUidStatus(dict['uid.sending'],'pending');
+  const payload=Object.fromEntries(new FormData(form).entries());
+  payload.page=location.href;
+  payload.language=state.lang;
+  const controller=new AbortController();
+  const timer=setTimeout(()=>controller.abort(),15000);
+  try{
+    const response=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload),signal:controller.signal});
+    const data=await response.json().catch(()=>({}));
+    if(!response.ok||!data.ok){
+      const errorKey=response.status===503?'uid.serverConfig':(response.status===403?'uid.origin':'uid.error');
+      throw new Error(errorKey)
+    }
+    const requestId=data.requestId||'OK';
+    safeStorageSet(UID_COOLDOWN_KEY,String(Date.now()));
+    safeStorageSet(UID_LAST_KEY,JSON.stringify({requestId,partner:payload.partner,sentAt:new Date().toISOString()}));
+    setUidConnection('ready');
+    markGuideSubmitted();
+    setUidStatus(`${dict['uid.success']} · #${requestId}`,'success');
+    document.getElementById('uidValue').value='';
+    document.getElementById('uidNote').value='';
+    saveUidDraft();updateUidSummary();resetUidTimer()
+  }catch(error){
+    setUidConnection('error');
+    setUidStatus(error?.name==='AbortError'?dict['uid.error']:(dict[error.message]||dict['uid.error']),'error')
+  }finally{
+    clearTimeout(timer);
+    const currentButton=document.getElementById('uidSubmit');
+    if(currentButton){currentButton.disabled=false;currentButton.removeAttribute('aria-busy');currentButton.textContent=dict['uid.submit']}
+  }
+}
 function renderAll(){renderFeatured();renderTape();Object.keys(PAGE_CATEGORY).forEach(renderCategory);renderTop();renderGuide();renderCalcOptions();updateCalc()}
 
 async function copyCode(btn,code){const original=btn.textContent;try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(code)}else{const ta=document.createElement('textarea');ta.value=code;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove()}btn.textContent=ui().copied;btn.classList.add('copied');setTimeout(()=>{btn.textContent=original;btn.classList.remove('copied')},1500)}catch{btn.textContent=code;setTimeout(()=>btn.textContent=original,1800)}}
